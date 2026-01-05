@@ -10,33 +10,56 @@ cenario:
     	jal DesenhaAviao 
     
 Entidades:
-    	lui $23,0x1001
-    	addi $23,$23,76
-    	jal DesenhaCasa
+    	
+	lui $24,0x1001
+    	addi $24,$24,76000
     
-    	lui $6,0x1001
-    	addi $6,$6,400
+    	sw $0,100($24) #Flag do tiro, 1 se estiver ativo, 0 ao contrario
+    	
+    	lui $25,0x1001
+    	addi $25,$25,18176 # Endereço do tiro
+    	sw $25,200($24) # Endereço do tiro
+    	
+    	sw $0,300($24) #Contador de frames
+    	
+    	
+    	lui $25,0x1001
+    	addi $25,$25,252 # Endereço do tiro
+    	sw $25,400($24) # Endereço do combustivel
+    	lw $25,400($24)
+    	add $7,$0,$25
+    	jal DesenhaCombustivel
+    	
+    	
+    	lui $25,0x1001
+    	addi $25,$25,76
+    	sw $25,500($24)
+    	lw $25,500($24)
+    	add $7,$0,$25
+    	jal DesenhaCasa
+    	
+    	lui $25,0x1001
+    	addi $25,$25,400
+    	sw $25,600($24)
+    	lw $25,600($24)
+    	add $7,$0,$25
     	jal DesenhaCasa2
     
-    	lui $26,0x1001 # Endereço do floco de neve
-    	addi $26,$26,184
+    	lui $25,0x1001 # Endereço do floco de neve
+    	addi $25,$25,184
+    	sw $25,700($24)
+    	lw $25,700($24)
+    	add $7,$0,$25
     	jal DesenhaFloco
 
 
-    	lui $27,0x1001 # Endereço do Navio
-    	addi $27,$27,320
+    	lui $25,0x1001 # Endereço do Navio
+    	addi $25,$25,320
+    	sw $25,800($24)
+    	lw $25,800($24)
+    	add $7,$0,$25
     	jal DesenhaNavio
     
-    
-    	lui $25,0x1001
-    	addi $25,$25,18176 # Endereço do tiro
-    
-    	lui $24,0x1001
-    	addi $24,$24,76000
-    
-    	sw $0,100($24) #Flag do tiro, 1 se estiver ativo, 0 ao contraro
-    	sw $25,200($24) # Endereço do tiro
-    	sw $0,300($24) #Contador de frames
     
 LoopJogo:
     	jal AtualizaJogador
@@ -59,25 +82,38 @@ MoverEntidade:
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaFloco
+    	
+    	lw $7, 700($24)
     	jal MoveFloco
+    	sw $7, 700($24)
 PulaFloco:
     	li $10,60
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaNavio
+    	
+    	lw $7,800($24)
     	jal MoveNavio
+    	sw $7, 800($24)
 PulaNavio:
     	li $10,60
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaCasa
+    	
+    	lw $7,500($24)
     	jal MoveCasa
+    	sw $7,500($24)
 PulaCasa:
 	li $10,80
 	div $9,$10
 	mfhi $11
 	bne $11,$0,PulaCasa2
-	jal MoveCasa2
+	
+	lw $7,600($24)
+    	jal MoveCasa2
+    	sw $7,600($24)
+    	
 PulaCasa2:
 	li $10,8000
 	blt $9,$10,FimCiclo
@@ -265,7 +301,7 @@ DesenhaCasa:
     	addi $9,$0,0
     	addi $14,$0,0
     
-    
+    	add $23,$0,$7
     	ori  $19,$0,0x8000 # COR VERDE
     	ori  $18,0x98FB98 #Azul
     	ori $14,0x964B00
@@ -384,94 +420,94 @@ ApagaCasa:
 	addi $19,$0,0
 	ori  $19,$0,0x8000 # COR VERDE
 	
-   	sw $19,0($23)# inicializa��o da primeira linha
-    	sw $19,4($23)
-    	sw $19,8($23)
-    	sw $19,12($23)
-    	sw $19,16($23)
-    	sw $19,20($23)
-    	sw $19,24($23)
-    	sw $19,28($23)
-    	sw $19,32($23)
-    	sw $19,36($23)
-    	sw $19,40($23)
-    	sw $19,44($23) 
+   	sw $19,0($7)# inicializa��o da primeira linha
+    	sw $19,4($7)
+    	sw $19,8($7)
+    	sw $19,12($7)
+    	sw $19,16($7)
+    	sw $19,20($7)
+    	sw $19,24($7)
+    	sw $19,28($7)
+    	sw $19,32($7)
+    	sw $19,36($7)
+    	sw $19,40($7)
+    	sw $19,44($7) 
 #########################
 
-    	sw $19,496($23)
+    	sw $19,496($7)
 	
-    	sw $19,508($23) # inicializa��o da segunda linha
-    	sw $19,512($23)
-    	sw $19,516($23)
-    	sw $19,520($23)
-    	sw $19,524($23)
-    	sw $19,528($23)
-    	sw $19,532($23)
-    	sw $19,536($23)
-    	sw $19,540($23)
-    	sw $19,544($23)
-    	sw $19,548($23)
-    	sw $19,552($23)
-    	sw $19,556($23)
-    	sw $19,560($23)
+    	sw $19,508($7) # inicializa��o da segunda linha
+    	sw $19,512($7)
+    	sw $19,516($7)
+    	sw $19,520($7)
+    	sw $19,524($7)
+    	sw $19,528($7)
+    	sw $19,532($7)
+    	sw $19,536($7)
+    	sw $19,540($7)
+    	sw $19,544($7)
+    	sw $19,548($7)
+    	sw $19,552($7)
+    	sw $19,556($7)
+    	sw $19,560($7)
 
 
 #########################
 
     
-    	sw $19,1004($23)
-    	sw $19,1008($23)
-    	sw $19,1012($23)
+    	sw $19,1004($7)
+    	sw $19,1008($7)
+    	sw $19,1012($7)
     
     
-    	sw $19,1024($23)
-    	sw $19,1028($23)
-    	sw $19,1036($23)
-    	sw $19,1040($23)
-    	sw $19,1044($23)
-    	sw $19,1048($23)
-    	sw $19,1052($23)
-    	sw $19,1056($23)
-    	sw $19,1060($23)
-    	sw $19,1064($23)
-    	sw $19,1068($23)
+    	sw $19,1024($7)
+    	sw $19,1028($7)
+    	sw $19,1036($7)
+    	sw $19,1040($7)
+    	sw $19,1044($7)
+    	sw $19,1048($7)
+    	sw $19,1052($7)
+    	sw $19,1056($7)
+    	sw $19,1060($7)
+    	sw $19,1064($7)
+    	sw $19,1068($7)
 #########################
 
-    	sw $19,1512($23)
-    	sw $19,1516($23)
-    	sw $19,1520($23)
-    	sw $19,1524($23)
-	sw $19,1528($23)
+    	sw $19,1512($7)
+    	sw $19,1516($7)
+    	sw $19,1520($7)
+    	sw $19,1524($7)
+	sw $19,1528($7)
     
-    	sw $19,1536($23) # inicializa��o da quarta linha
+    	sw $19,1536($7) # inicializa��o da quarta linha
     	#sw $3,-13812($24) janela
     	#sw $3,-13808($24) janela
-    	sw $19,1548($23)
-    	sw $19,1552($23)
+    	sw $19,1548($7)
+    	sw $19,1552($7)
     	#sw $3,-13796($24) janela
     	#sw $3,-13792($24) janela
-    	sw $19,1564($23)
+    	sw $19,1564($7)
     	#sw $3,-13784($24) janela
     	#sw $3,-13780($24) janela
-    	sw $19,1576($23)
-    	sw $19,1580($23)
+    	sw $19,1576($7)
+    	sw $19,1580($7)
 
 
 #########################
-   	sw $19,2032($23)
+   	sw $19,2032($7)
    
-   	sw $19,2048($23)
-   	sw $19,2052($23)
-   	sw $19,2056($23)
-   	sw $19,2060($23)
-   	sw $19,2064($23)
-   	sw $19,2068($23)
-   	sw $19,2072($23)
-   	sw $19,2076($23)
-   	sw $19,2080($23)
-   	sw $19,2084($23)
-   	sw $19,2088($23)
-   	sw $19,2092($23)
+   	sw $19,2048($7)
+   	sw $19,2052($7)
+   	sw $19,2056($7)
+   	sw $19,2060($7)
+   	sw $19,2064($7)
+   	sw $19,2068($7)
+   	sw $19,2072($7)
+   	sw $19,2076($7)
+   	sw $19,2080($7)
+   	sw $19,2084($7)
+   	sw $19,2088($7)
+   	sw $19,2092($7)
    	
    	lw $ra,0($sp)
 	lw $19,4($sp)
@@ -485,16 +521,16 @@ MoveCasa:
 	sw $8,8($sp)
 	
 	jal ApagaCasa
-	addi $23,$23,512
-
-	ori $8,$8,45000
-	lui $11,0x1001
-	addu $8,$8,$11
+	addi $7,$7,512
 	
-	slt $9,$23,$8
+	lui $8,0x1001
+	ori $8,$8,45000
+	
+	slt $9,$7,$8
 	bne $9,$0,PulaResetCasa
 	
-	addi $23,$11,76
+	lui $11,0x1001
+	addi $7,$11,76
 PulaResetCasa:
 	jal DesenhaCasa
 	lw $ra,0($sp)
@@ -517,7 +553,7 @@ DesenhaCasa2:
     	addi $9,$0,0
     	addi $14,$0,0
     
-    
+    	add $6,$0,$7
     	ori  $19,$0,0x8000 # COR VERDE
     	ori  $18,0x98FB98 #Azul
     	ori $14,0x964B00
@@ -634,94 +670,94 @@ ApagaCasa2:
 	addi $19,$0,0
 	ori  $19,$0,0x8000 # COR VERDE
 	
-   	sw $19,0($6) # inicializa��o da primeira linha
-    	sw $19,4($6)
-    	sw $19,8($6)
-    	sw $19,12($6)
-    	sw $19,16($6)
-    	sw $19,20($6)
-    	sw $19,24($6)
-    	sw $19,28($6)
-    	sw $19,32($6)
-    	sw $19,36($6)
-    	sw $19,40($6)
-    	sw $19,44($6)
+   	sw $19,0($7) # inicializa��o da primeira linha
+    	sw $19,4($7)
+    	sw $19,8($7)
+    	sw $19,12($7)
+    	sw $19,16($7)
+    	sw $19,20($7)
+    	sw $19,24($7)
+    	sw $19,28($7)
+    	sw $19,32($7)
+    	sw $19,36($7)
+    	sw $19,40($7)
+    	sw $19,44($7)
 
 #########################
 
-    	sw $19,508($6) # inicializa��o da segunda linha
-    	sw $19,512($6)
-    	sw $19,516($6)
-    	sw $19,520($6)
-    	sw $19,524($6)
-    	sw $19,528($6)
-    	sw $19,532($6)
-    	sw $19,536($6)
-    	sw $19,540($6)
-    	sw $19,544($6)
-    	sw $19,548($6)
-    	sw $19,552($6)
-    	sw $19,556($6)
-    	sw $19,560($6)
+    	sw $19,508($7) # inicializa��o da segunda linha
+    	sw $19,512($7)
+    	sw $19,516($7)
+    	sw $19,520($7)
+    	sw $19,524($7)
+    	sw $19,528($7)
+    	sw $19,532($7)
+    	sw $19,536($7)
+    	sw $19,540($7)
+    	sw $19,544($7)
+    	sw $19,548($7)
+    	sw $19,552($7)
+    	sw $19,556($7)
+    	sw $19,560($7)
 
-    	sw $19,576($6)
-
-#########################
-
-    	sw $19,1024($6) # inicializa��o da terceira linha
-    	sw $19,1028($6)
-    	sw $19,1032($6)
-    	sw $19,1036($6)
-   	sw $19,1040($6)
-    	sw $19,1044($6)
-    	sw $19,1048($6)
-    	sw $19,1052($6)
-    	sw $19,1056($6)
-    	sw $19,1060($6)
-    	sw $19,1064($6)
-    	sw $19,1068($6)
-
-    	sw $19,1084($6)
-    	sw $19,1088($6)
-    	sw $19,1092($6)
+    	sw $19,576($7)
 
 #########################
 
-    	sw $19,1536($6) # inicializa��o da quarta linha
+    	sw $19,1024($7) # inicializa��o da terceira linha
+    	sw $19,1028($7)
+    	sw $19,1032($7)
+    	sw $19,1036($7)
+   	sw $19,1040($7)
+    	sw $19,1044($7)
+    	sw $19,1048($7)
+    	sw $19,1052($7)
+    	sw $19,1056($7)
+    	sw $19,1060($7)
+    	sw $19,1064($7)
+    	sw $19,1068($7)
+
+    	sw $19,1084($7)
+    	sw $19,1088($7)
+    	sw $19,1092($7)
+
+#########################
+
+    	sw $19,1536($7) # inicializa��o da quarta linha
     	#sw $3,-3692($24) janela
     	#sw $3,-3688($24) janela
-    	sw $19,1548($6)
-    	sw $19,1552($6)
+    	sw $19,1548($7)
+    	sw $19,1552($7)
     	#sw $3,-3676($24) janela
     	#sw $3,-3672($24) janela
-    	sw $19,1564($6)
+    	sw $19,1564($7)
     	#sw $3,-3664($24) janela
     	#sw $3,-3660($24) janela
-    	sw $19,1576($6)
-    	sw $19,1580($6)
+    	sw $19,1576($7)
+    	sw $19,1580($7)
 
-    	sw $19,1592($6)
-    	sw $19,1596($6)
-    	sw $19,1600($6)
-    	sw $19,1604($6)
-    	sw $19,1608($6)
+    	sw $19,1592($7)
+    	sw $19,1596($7)
+    	sw $19,1600($7)
+    	sw $19,1604($7)
+    	sw $19,1608($7)
 
 #########################
 
-    	sw $19,2048($6) # inicializa��o da quinta linha
-    	sw $19,2052($6)
-    	sw $19,2056($6)
-    	sw $19,2060($6)
-    	sw $19,2064($6)
-   	sw $19,2068($6)
-    	sw $19,2072($6)
-    	sw $19,2076($6)
-    	sw $19,2080($6)
-    	sw $19,2084($6)
-    	sw $19,2088($6)
-   	sw $19,2092($6)
+    	sw $19,2048($7) # inicializa��o da quinta linha
+    	sw $19,2052($7)
+    	sw $19,2056($7)
+    	sw $19,2060($7)
+    	sw $19,2064($7)
+   	sw $19,2068($7)
+    	sw $19,2072($7)
+    	sw $19,2076($7)
+    	sw $19,2080($7)
+    	sw $19,2084($7)
+    	sw $19,2088($7)
+   	sw $19,2092($7)
     
-    	sw $19,2112($6)
+    	sw $19,2112($7)
 	
 	sw $ra,0($sp)
 	sw $19,4($sp)
@@ -735,16 +771,16 @@ MoveCasa2:
 	sw $8,8($sp)
 	
 	jal ApagaCasa2
-	addi $6,$6,512
+	addi $7,$7,512
 
 	lui $8,0x1001
 	ori $8,$8,45000
 	
-	slt $9,$6,$8
+	slt $9,$7,$8
 	bne $9,$0,PulaResetCasa2
 	
 	lui $6,0x1001
-	addi $6,$6,400
+	addi $7,$6,400
 PulaResetCasa2:
 	jal DesenhaCasa2
 	lw $ra,0($sp)
@@ -825,14 +861,16 @@ DesenhaAviao:
     	jr $ra
     
 DesenhaNavio:
-	addi $sp,$sp,-12
+	addi $sp,$sp,-16
 	sw $9,0($sp)
 	sw $17,4($sp)
 	sw $ra,8($sp)
+	sw $27,12($sp)
 	
 	addi $17,$0,0
 	ori $17,0xff0000
 	
+	add $27,$0,$7
 	
 	addi $9,$0,0
 	ori $9,0x0000
@@ -877,8 +915,8 @@ DesenhaNavio:
 	lw $9,0($sp)
 	lw $17,4($sp)
 	lw $ra,8($sp)
-	
-	addi $sp,$sp,12
+	lw $27,12($sp)
+	addi $sp,$sp,16
 	
 	jr $ra
 MoveNavio:
@@ -889,17 +927,17 @@ MoveNavio:
 	
 	
 	jal ApagaNavio
-	addi $27,$27,512
+	addi $7,$7,512
 
 	lui $8,0x1001
 	ori $8,$8,45312
 	
-	slt $9,$27,$8
+	slt $9,$7,$8
 	bne $9,$0,PulaResetNavio
 	
-	add $4,$0,$26
+	lw $4,700($24)
 	jal RandomizarSeguro
-	add $27,$0,$2
+	add $7,$0,$2
 PulaResetNavio:
         
 	jal DesenhaNavio
@@ -918,97 +956,46 @@ ApagaNavio:
 	 
     	ori  $20,$0,0x33FF   # azul   
 	
-	sw $20,0($27)
+	sw $20,0($7)
 	
-	sw $20, 512($27)
-	sw $20, 516($27)
+	sw $20, 512($7)
+	sw $20, 516($7)
 	
-	sw $20, 1024($27)
-	sw $20, 1028($27)
-	sw $20, 1032($27)
+	sw $20, 1024($7)
+	sw $20, 1028($7)
+	sw $20, 1032($7)
 	
-	sw $20, 1524($27)
-	sw $20, 1528($27)
-	sw $20, 1532($27)
-	sw $20, 1536($27)
-	sw $20, 1540($27)
-	sw $20, 1544($27)
-	sw $20, 1548($27)
-	sw $20, 1552($27)
-	sw $20, 1556($27)
+	sw $20, 1524($7)
+	sw $20, 1528($7)
+	sw $20, 1532($7)
+	sw $20, 1536($7)
+	sw $20, 1540($7)
+	sw $20, 1544($7)
+	sw $20, 1548($7)
+	sw $20, 1552($7)
+	sw $20, 1556($7)
 	
-	sw $20, 2036($27)
-	sw $20, 2040($27)
-	sw $20, 2044($27)
-	sw $20, 2048($27)
-	sw $20, 2052($27)
-	sw $20, 2056($27)
-	sw $20, 2060($27)
-	sw $20, 2064($27)
-	sw $20, 2068($27)
+	sw $20, 2036($7)
+	sw $20, 2040($7)
+	sw $20, 2044($7)
+	sw $20, 2048($7)
+	sw $20, 2052($7)
+	sw $20, 2056($7)
+	sw $20, 2060($7)
+	sw $20, 2064($7)
+	sw $20, 2068($7)
 	
-	sw $20, 2552($27)
-	sw $20, 2556($27)
-	sw $20, 2560($27)
-	sw $20, 2564($27)
-	sw $20, 2568($27)
-	sw $20, 2572($27)
-	sw $20, 2576($27)
+	sw $20, 2552($7)
+	sw $20, 2556($7)
+	sw $20, 2560($7)
+	sw $20, 2564($7)
+	sw $20, 2568($7)
+	sw $20, 2572($7)
+	sw $20, 2576($7)
 	
 	lw $20,0($sp)
 	lw $ra,4($sp)
 	addi $sp,$sp,8
-	
-	jr $ra
-DesenhaNavioNovaPos:
-	addi $sp,$sp,-12
-	sw $9,0($sp)
-	sw $17,4($sp)
-	sw $ra,8($sp)
-	
-	
-	sw $9,0($27)
-	
-	sw $9, 512($27)
-	sw $9, 516($27)
-	
-	sw $9, 1024($27)
-	sw $9, 1028($27)
-	sw $9, 1032($27)
-	
-	sw $17, 1524($27)
-	sw $17, 1528($27)
-	sw $17, 1532($27)
-	sw $17, 1536($27)
-	sw $17, 1540($27)
-	sw $17, 1544($27)
-	sw $17, 1548($27)
-	sw $17, 1552($27)
-	sw $17, 1556($27)
-	
-	sw $9, 2036($27)
-	sw $9, 2040($27)
-	sw $9, 2044($27)
-	sw $9, 2048($27)
-	sw $9, 2052($27)
-	sw $9, 2056($27)
-	sw $17, 2060($27)
-	sw $17, 2064($27)
-	sw $17, 2068($27)
-	
-	sw $9, 2552($27)
-	sw $9, 2556($27)
-	sw $9, 2560($27)
-	sw $9, 2564($27)
-	sw $9, 2568($27)
-	sw $9, 2572($27)
-	sw $9, 2576($27)
-	
-	lw $9,0($sp)
-	lw $17,4($sp)
-	lw $ra,8($sp)
-	
-	addi $sp,$sp,12
 	
 	jr $ra
 	
@@ -1021,7 +1008,7 @@ DesenhaFloco:
 	addi $19,$0,0
 	ori $19,0xF0F8FF
 	
-	
+	add $26,$0,$7
 	
 	sw $19, 0($26)
 	sw $19, 8($26)
@@ -1058,17 +1045,17 @@ MoveFloco:
 	sw $8,8($sp)
 	
 	jal ApagaFloco
-	addi $26,$26,512
+	addi $7,$7,512
 	
 	lui $8,0x1001
 	addi $8,$8,45312
 	
-	slt $9,$26,$8
+	slt $9,$7,$8
 	bne $9,$0,PulaResetFloco
 	
-	add $4,$0,$27
+	lw $4,800($24)
 	jal RandomizarSeguro
-	add $26,$0,$2
+	add $7,$0,$2
 PulaResetFloco:
 	jal DesenhaFloco
 	lw $ra,0($sp)
@@ -1081,30 +1068,104 @@ ApagaFloco:
 	 
     	ori  $19,$0,0x33FF
     	
-	sw $19, 0($26)
-	sw $19, 8($26)
-	sw $19, 16($26)
+	sw $19, 0($7)
+	sw $19, 8($7)
+	sw $19, 16($7)
 	
-	sw $19, 516($26)
-	sw $19, 520($26)
-	sw $19, 524($26)
+	sw $19, 516($7)
+	sw $19, 520($7)
+	sw $19, 524($7)
 	
-	sw $19, 1024($26)
-	sw $19, 1028($26)
-	sw $19, 1032($26)
-	sw $19, 1036($26)
-	sw $19, 1040($26)
+	sw $19, 1024($7)
+	sw $19, 1028($7)
+	sw $19, 1032($7)
+	sw $19, 1036($7)
+	sw $19, 1040($7)
 	
-	sw $19, 1540($26)
-	sw $19, 1544($26)
-	sw $19, 1548($26)
+	sw $19, 1540($7)
+	sw $19, 1544($7)
+	sw $19, 1548($7)
 	
-	sw $19, 2048($26)
-	sw $19, 2056($26)
-	sw $19, 2064($26)
+	sw $19, 2048($7)
+	sw $19, 2056($7)
+	sw $19, 2064($7)
 	
 	jr $ra
-
+DesenhaCombustivel:
+	addi $sp,$sp,-12
+	sw $ra,0($sp)
+	sw $15,4($sp)
+	sw $16,8($sp)
+	
+	addi $15,$0,0xFF4500
+	
+	add $16,$0,$7
+	
+	sw $15,0($16)
+	sw $15,4($16)
+	
+	sw $15,512($16)
+	sw $15,516($16)
+	
+	sw $15,1024($16)
+	sw $15,1028($16)
+	
+	lw $ra,0($sp)
+	lw $15,4($sp)
+	lw $16,8($sp)
+	
+	addi $sp,$sp,12
+	jr $ra
+ApagaCombustivel:
+	addi $sp,$sp,-8
+	sw $ra,0($sp)
+	sw $15,4($sp)
+	
+	
+	addi $15,$0,0x000033FF
+	
+	sw $15,0($7)
+	sw $15,4($7)
+	
+	sw $15,512($7)
+	sw $15,516($7)
+	
+	sw $15,1024($7)
+	sw $15,1028($7)
+	
+	lw $ra,0($sp)
+	lw $15,4($sp)
+	addi $sp,$sp,8
+	jr $ra
+MoveCombustivel:
+	addi $sp,$sp,-12
+	sw $ra,0($sp)
+	sw $8,4($sp)
+	sw $9,8($sp)
+	
+	jal ApagaCombustivel
+	
+	addi $7,$7,512
+	
+	lui $8,0x1001
+	ori $8,$8,45312
+	
+	slt $9,$7,$8
+	bne $9,$0,PulaResetCombustivel
+	
+	lw $4,400($24)
+	jal RandomizarSeguro
+	add $7,$0,$2
+PulaResetCombustivel:
+	sw $7,400($24)
+	jal DesenhaCombustivel
+	
+	lw $ra,0($sp)
+	lw $8,4($sp)
+	lw $9,8($sp)
+	
+	addi $sp,$sp,12
+	jr $ra
 MoveTiro:
 	
 	addiu $sp,$sp,-20
@@ -1173,20 +1234,19 @@ ChecarColisao:
 	lw $10,200($24)
 	beq $10,$0,FimColisao
 	
-	li $8,0x10010200
-	slt $9,$10,$8
-	bne $9,$0,FimColisao
-	
-	
 	lw $11,-512($10)
 	
-	beq $11,$12,ColidiuNavio
+	
+	beq $11,$9,FimColisao
+	
 	beq $11,$13,ColidiuFloco
 	
 	
-	j FimColisao
+	j ColidiuNavio
 	
 ColidiuNavio:
+	lw $7,800($24)
+
 	addi $4, $0, 10		# Nota Sol
 	addi $5, $0, 400
     	addi $6, $0, 12		# Instrumento
@@ -1194,11 +1254,13 @@ ColidiuNavio:
 	addi $2, $0, 31		
 	syscall
 	
+	lw $7,800($24)
+	
 	jal ApagaNavio
 	
-	add $4,$0,$26
+	lw $4,800($24)
 	jal RandomizarSeguro
-	add $27,$0,$2
+	sw $2,800($24)
 	
 	lw $10,200($24)
 	beq $10,$0,PularApagaTiro
@@ -1211,6 +1273,8 @@ PularApagaTiro:
 	sw $0,200($24)
 	j FimColisao
 ColidiuFloco:
+	lw $7,700($24)
+	
 	addi $4, $0, 10		# Nota Sol
 	addi $5, $0,400
     	addi $6, $0, 12		# Instrumento
@@ -1218,11 +1282,13 @@ ColidiuFloco:
 	addi $2, $0, 31		
 	syscall
 	
+	lw $7,700($24)
+	
 	jal ApagaFloco
 	
-	add $4,$0,$27
+	lw $4,700($24)
 	jal RandomizarSeguro
-	add $26,$0,$2
+	sw $2,700($24)
 	
 	lw $10,200($24)
 	beq $10,$0,PularApagaFloco
@@ -1253,17 +1319,19 @@ FimColisao:
 	
 	
 ChecarColisaoInimigo:
-	sub $8,$3,$27 #$8 = (Endereço Avião) - (Endereço Navio)
+	addi $sp,$sp,-4
+	sw $ra,0($sp)
 	
+	lw $27,800($24)
+	lw $26,700($24)
+	
+	sub $8,$3,$27 #$8 = (Endereço Avião) - (Endereço Navio)
+	abs $8,$8
 	# Testa se o navio está muito acima
 	
 	li $9,3500    ## 4500 bytes sao quase 9 linhas de distância
 	bgt $8,$9,ChecaFloco # Se a diferença > 4500, o avião está muito abaixo do navio
 	
-	# Testa se o navio ta muito abaixo do aviao
-	
-	li $9,-3500 
-	blt $8,$9,ChecaFloco
 	
 	# SE O CODIGO CHEGOU AQUI ELES ESTAO NA MESA FAIXA DE LINHAS
 	
@@ -1277,18 +1345,19 @@ ChecarColisaoInimigo:
 	blt $12,$13,Game_over # game_over
 ChecaFloco:
 	sub $8,$3,$26
+	abs $8,$8
 	li $9,3500
 	bgt $8,$9,FimColisaoInimigo
-	li $9,-2500
-	blt $8,$9,FimColisaoInimigo
 	
 	andi $10,$3,0x1ff
 	andi $11,$26,0x1ff
 	sub $12,$10,$11
 	abs $12,$12
-	li $13,35
+	li $13,30
 	blt $12,$13,Game_over
 FimColisaoInimigo:
+	lw $ra,0($sp)
+	addi $sp,$sp,4
 	jr $ra
 Game_over:
 	addi $2,$0,10
@@ -1672,7 +1741,7 @@ LoopSeguro:
 
 	
 DesenhaHUD:
-	addi $sp,$sp,-28
+	addi $sp,$sp,-32
 	sw $ra,0($sp)
 	sw $5,4($sp)
 	sw $6,8($sp)
