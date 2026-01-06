@@ -59,6 +59,8 @@ Entidades:
     	lw $25,800($24)
     	add $7,$0,$25
     	jal DesenhaNavio
+    	
+    	sw $0,1000($24) #Contagem de Pontos
     
     
 LoopJogo:
@@ -96,7 +98,7 @@ PulaFloco:
     	jal MoveNavio
     	sw $7, 800($24)
 PulaNavio:
-    	li $10,60
+    	li $10,5
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaCasa
@@ -105,7 +107,7 @@ PulaNavio:
     	jal MoveCasa
     	sw $7,500($24)
 PulaCasa:
-	li $10,80
+	li $10,5
 	div $9,$10
 	mfhi $11
 	bne $11,$0,PulaCasa2
@@ -113,12 +115,19 @@ PulaCasa:
 	lw $7,600($24)
     	jal MoveCasa2
     	sw $7,600($24)
-    	
 PulaCasa2:
+	li $10,5
+	div $9,$10
+	mfhi $11
+	bne $11,$0,PulaCombustivel
+	
+	lw $7,400($24)
+    	jal MoveCombustivel
+    	sw $7,400($24)
+PulaCombustivel:
 	li $10,8000
 	blt $9,$10,FimCiclo
-	sw $0,300($24)
-    
+	sw $0,300($24) 
 FimCiclo:
     	jal timer_curto
     
@@ -529,8 +538,19 @@ MoveCasa:
 	slt $9,$7,$8
 	bne $9,$0,PulaResetCasa
 	
-	lui $11,0x1001
-	addi $7,$11,76
+	lw $4,500($24)
+	jal RandomizarSeguro
+	
+	addi $8,$0,0xFFFFFE00
+	and $8,$2,$8
+	
+	addi $2,$0,42
+	addi $5,$0,17
+	syscall
+	sll $4,$4,2
+	addi $4,$4,28
+	
+	add $7,$8,$4
 PulaResetCasa:
 	jal DesenhaCasa
 	lw $ra,0($sp)
@@ -772,15 +792,27 @@ MoveCasa2:
 	
 	jal ApagaCasa2
 	addi $7,$7,512
-
+	
 	lui $8,0x1001
 	ori $8,$8,45000
 	
 	slt $9,$7,$8
 	bne $9,$0,PulaResetCasa2
 	
-	lui $6,0x1001
-	addi $7,$6,400
+	lw $4,600($24)
+	jal RandomizarSeguro
+	
+	addi $8,$0,0xFFFFFE00
+	and $8,$2,$8
+	
+	addi $2,$0,42
+	addi $5,$0,15
+	syscall
+	
+	sll $4,$4,2
+	addi $4,$4,380
+	
+	add $7,$8,$4
 PulaResetCasa2:
 	jal DesenhaCasa2
 	lw $ra,0($sp)
@@ -1224,10 +1256,10 @@ ChecarColisao:
 	sw $7,36($sp)
 	sw $2,40($sp)
 	
-	addi $8,$0,0xffff0000
-	addi $9,$0,0x000033ff
-	addi $12,$0,0x00000000
-	addi $13,$0,0x00f0f8ff
+	addi $8,$0,0xFF4500
+	addi $9,$0,0x000033ff #Azul
+	addi $12,$0,0x00000000 #Preto
+	addi $13,$0,0x00f0f8ff # Floco
 	
 	
 	
@@ -1241,8 +1273,10 @@ ChecarColisao:
 	
 	beq $11,$13,ColidiuFloco
 	
+	beq $11,$12,ColidiuNavio
 	
-	j ColidiuNavio
+	beq $11,$8,ColidiuCombustivel
+	
 	
 ColidiuNavio:
 	lw $7,800($24)
@@ -1263,12 +1297,12 @@ ColidiuNavio:
 	sw $2,800($24)
 	
 	lw $10,200($24)
-	beq $10,$0,PularApagaTiro
+	beq $10,$0,PularApagaNavio
 	
 	addi $12,$0,0x000033ff
 	sw $12,0($10)
 	sw $12,4($10)
-PularApagaTiro:
+PularApagaNavio:
 	sw $0,100($24)
 	sw $0,200($24)
 	j FimColisao
@@ -1300,6 +1334,34 @@ PularApagaFloco:
 	sw $0,100($24)
 	sw $0,200($24)
 	j FimColisao
+ColidiuCombustivel:
+	lw $7,400($24)
+
+	addi $4, $0, 10		# Nota Sol
+	addi $5, $0, 400
+    	addi $6, $0, 12		# Instrumento
+        addi $7, $0, 300	# Volume
+	addi $2, $0, 31		
+	syscall
+	
+	lw $7,400($24)
+	
+	jal ApagaCombustivel
+	
+	lw $4,400($24)
+	jal RandomizarSeguro
+	sw $2,400($24)
+	
+	lw $10,200($24)
+	beq $10,$0,PularApagaCombustivel
+	
+	addi $12,$0,0x000033ff
+	sw $12,0($10)
+	sw $12,4($10)
+PularApagaCombustivel:
+	sw $0,100($24)
+	sw $0,200($24)
+	j FimColisao 
 FimColisao:
 	lw $ra,0($sp)
 	lw $9,4($sp)
@@ -1316,7 +1378,6 @@ FimColisao:
 	addi $sp,$sp,44
 	jr $ra
 
-	
 	
 ChecarColisaoInimigo:
 	addi $sp,$sp,-4
