@@ -24,8 +24,8 @@ Entidades:
     	
     	
     	lui $25,0x1001
-    	addi $25,$25,252 # Endereço do tiro
-    	sw $25,400($24) # Endereço do combustivel
+    	addi $25,$25,252 # Endereço do combustivel
+    	sw $25,400($24) 
     	lw $25,400($24)
     	add $7,$0,$25
     	jal DesenhaCombustivel
@@ -61,6 +61,16 @@ Entidades:
     	jal DesenhaNavio
     	
     	sw $0,1000($24) #Contagem de Pontos
+    	
+    	lui $25,0x1001
+    	ori $25,$25,0xAF00
+    	sw $25,1100($24)
+    	
+    	lui $25,0x1001
+    	ori $25,$25,0xAF00
+    	sw $25,1200($24)
+    	
+    	
     
     
 LoopJogo:
@@ -98,7 +108,7 @@ PulaFloco:
     	jal MoveNavio
     	sw $7, 800($24)
 PulaNavio:
-    	li $10,5
+    	li $10,30
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaCasa
@@ -107,7 +117,7 @@ PulaNavio:
     	jal MoveCasa
     	sw $7,500($24)
 PulaCasa:
-	li $10,5
+	li $10,50
 	div $9,$10
 	mfhi $11
 	bne $11,$0,PulaCasa2
@@ -116,15 +126,33 @@ PulaCasa:
     	jal MoveCasa2
     	sw $7,600($24)
 PulaCasa2:
-	li $10,5
+	li $10,50
 	div $9,$10
 	mfhi $11
-	bne $11,$0,PulaCombustivel
+	bne $11,$0,ChecarNivel
 	
 	lw $7,400($24)
     	jal MoveCombustivel
     	sw $7,400($24)
-PulaCombustivel:
+ChecarNivel:
+	lw $8,1000($24)
+	addi $10,$0,10
+	blt $8,$10,PrepararFim
+MoverFase2:
+	li $10,60
+	div $9,$10
+	mfhi $11
+	bne $11,$0,PrepararFim
+	
+	lw $7,1100($24)
+	jal MoveNavio
+	sw $7,1100($24)
+	
+	lw $7,1200($24)
+	jal MoveFloco
+	sw $7,1200($24)
+	
+PrepararFim:
 	li $10,8000
 	blt $9,$10,FimCiclo
 	sw $0,300($24) 
@@ -1277,9 +1305,24 @@ ChecarColisao:
 	
 	beq $11,$8,ColidiuCombustivel
 	
-	
 ColidiuNavio:
-	lw $7,800($24)
+	lw $10,200($24)
+	lw $13,800($24)
+	lw $14,1100($24)
+	
+	sub $15,$10,$14
+	bgez $15,ChecarDistanciaNavio
+	sub $15,$0,$15
+ChecarDistanciaNavio:
+	addi $16,$0,5000
+	blt $15,$16,ResetNavio2
+ResetNavio1:
+	addi $15,$24,800
+	j ExecutarResetNavio
+ResetNavio2:
+	addi $15,$24,1100
+ExecutarResetNavio:
+	lw $7,0($15)
 
 	addi $4, $0, 10		# Nota Sol
 	addi $5, $0, 400
@@ -1288,13 +1331,17 @@ ColidiuNavio:
 	addi $2, $0, 31		
 	syscall
 	
-	lw $7,800($24)
+	lw $8,1000($24)
+	addi $8,$8,1
+	sw $8,1000($24)
+	
+	lw $7,0($15)
 	
 	jal ApagaNavio
 	
-	lw $4,800($24)
+	lw $4,0($15)
 	jal RandomizarSeguro
-	sw $2,800($24)
+	sw $2,0($15)
 	
 	lw $10,200($24)
 	beq $10,$0,PularApagaNavio
@@ -1307,7 +1354,23 @@ PularApagaNavio:
 	sw $0,200($24)
 	j FimColisao
 ColidiuFloco:
-	lw $7,700($24)
+	lw $10,200($24)
+	lw $13,700($24)
+	lw $14,1200($24)
+	
+	sub $15,$10,$14
+	bgez $15,ChecarDistanciaFloco
+	sub $15,$0,$15
+ChecarDistanciaFloco:
+	addi $16,$0,3000
+	blt $15,$16,ResetFloco2
+ResetFloco1:
+	addi $15,$24,700
+	j ExecutarResetFloco
+ResetFloco2:
+	addi $15,$24,1200
+ExecutarResetFloco:
+	lw $7,0($15)
 	
 	addi $4, $0, 10		# Nota Sol
 	addi $5, $0,400
@@ -1316,13 +1379,18 @@ ColidiuFloco:
 	addi $2, $0, 31		
 	syscall
 	
-	lw $7,700($24)
+	lw $8,1000($24)
+	addi $8,$8,1
+	sw $8,1000($24)
+	
+	
+	lw $7,0($15)
 	
 	jal ApagaFloco
 	
-	lw $4,700($24)
+	lw $4,0($15)
 	jal RandomizarSeguro
-	sw $2,700($24)
+	sw $2,0($15)
 	
 	lw $10,200($24)
 	beq $10,$0,PularApagaFloco
