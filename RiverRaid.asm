@@ -90,7 +90,7 @@ MoverEntidade:
     	addi $9,$9,1
     	sw $9,300($24)
     
-    	li $10,60
+    	li $10,30
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaFloco
@@ -99,7 +99,7 @@ MoverEntidade:
     	jal MoveFloco
     	sw $7, 700($24)
 PulaFloco:
-    	li $10,60
+    	li $10,40
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaNavio
@@ -126,7 +126,7 @@ PulaCasa:
     	jal MoveCasa2
     	sw $7,600($24)
 PulaCasa2:
-	li $10,50
+	li $10,20
 	div $9,$10
 	mfhi $11
 	bne $11,$0,ChecarNivel
@@ -139,7 +139,7 @@ ChecarNivel:
 	addi $10,$0,10
 	blt $8,$10,PrepararFim
 MoverFase2:
-	li $10,60
+	li $10,30
 	div $9,$10
 	mfhi $11
 	bne $11,$0,PrepararFim
@@ -223,7 +223,7 @@ MapaFimMAPA:
 timer_curto:
     addi $25,$0,0
 LoopTimerCurto:
-    bge $25,2000,FimTimerCurto
+    bge $25,1000,FimTimerCurto
     addi $25,$25,1
     j LoopTimerCurto
 FimTimerCurto:
@@ -1310,17 +1310,15 @@ ColidiuNavio:
 	lw $13,800($24)
 	lw $14,1100($24)
 	
-	sub $15,$10,$14
-	bgez $15,ChecarDistanciaNavio
-	sub $15,$0,$15
-ChecarDistanciaNavio:
-	addi $16,$0,5000
-	blt $15,$16,ResetNavio2
-ResetNavio1:
-	addi $15,$24,800
-	j ExecutarResetNavio
+	sub $15,$10,$13
+	bltz $15,ResetNavio2
+	addi $16,$0,2600
+	ble $15,$16,ResetNavio1
 ResetNavio2:
 	addi $15,$24,1100
+	j ExecutarResetNavio
+ResetNavio1:
+	addi $15,$24,800
 ExecutarResetNavio:
 	lw $7,0($15)
 
@@ -1362,7 +1360,7 @@ ColidiuFloco:
 	bgez $15,ChecarDistanciaFloco
 	sub $15,$0,$15
 ChecarDistanciaFloco:
-	addi $16,$0,3000
+	addi $16,$0,5000
 	blt $15,$16,ResetFloco2
 ResetFloco1:
 	addi $15,$24,700
