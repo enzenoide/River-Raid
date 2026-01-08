@@ -62,13 +62,11 @@ Entidades:
     	
     	sw $0,1000($24) #Contagem de Pontos
     	
-    	lui $25,0x1001
-    	ori $25,$25,0xAF00
-    	sw $25,1100($24)
     	
-    	lui $25,0x1001
-    	ori $25,$25,0xAF00
-    	sw $25,1200($24)
+    	sw $0,1100($24)
+    	
+    	
+    	sw $0,1200($24)
     	
     	
     
@@ -90,7 +88,7 @@ MoverEntidade:
     	addi $9,$9,1
     	sw $9,300($24)
     
-    	li $10,30
+    	li $10,60
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaFloco
@@ -99,7 +97,7 @@ MoverEntidade:
     	jal MoveFloco
     	sw $7, 700($24)
 PulaFloco:
-    	li $10,40
+    	li $10,60
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaNavio
@@ -108,7 +106,7 @@ PulaFloco:
     	jal MoveNavio
     	sw $7, 800($24)
 PulaNavio:
-    	li $10,30
+    	li $10,60
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaCasa
@@ -117,7 +115,7 @@ PulaNavio:
     	jal MoveCasa
     	sw $7,500($24)
 PulaCasa:
-	li $10,50
+	li $10,60
 	div $9,$10
 	mfhi $11
 	bne $11,$0,PulaCasa2
@@ -126,7 +124,7 @@ PulaCasa:
     	jal MoveCasa2
     	sw $7,600($24)
 PulaCasa2:
-	li $10,20
+	li $10,60
 	div $9,$10
 	mfhi $11
 	bne $11,$0,ChecarNivel
@@ -134,10 +132,16 @@ PulaCasa2:
 	lw $7,400($24)
     	jal MoveCombustivel
     	sw $7,400($24)
+######################################
+# CHECAGEM DA CONTAGEM DE PONTOS PARA IR PARA A FASE 2
+######################################
 ChecarNivel:
 	lw $8,1000($24)
 	addi $10,$0,10
 	blt $8,$10,PrepararFim
+######################################
+#INICIO DA FASE 2
+######################################
 MoverFase2:
 	li $10,30
 	div $9,$10
@@ -145,10 +149,22 @@ MoverFase2:
 	bne $11,$0,PrepararFim
 	
 	lw $7,1100($24)
+	bne $7,$0,SegueNavio2
+	
+	lw $4,800($24)
+	jal RandomizarSeguro
+	add $7,$0,$2
+SegueNavio2:
 	jal MoveNavio
 	sw $7,1100($24)
 	
 	lw $7,1200($24)
+	bne $7,$0,SegueFloco2
+	
+	lw $7,700($24)
+	jal RandomizarSeguro
+	add $7,$0,$2
+SegueFloco2:
 	jal MoveFloco
 	sw $7,1200($24)
 	
@@ -345,7 +361,7 @@ DesenhaCasa:
     	ori $9,0x0000 # Preto
     	ori $17,0xff2400# vermehlo
     	ori $15,0xffff00#amarelo
-    	ori $16,0xffffff# Branco
+    	ori $16,0xDCDCDC# Branco
 	
     	sw $9,0($23)# inicializa��o da primeira linha
     	sw $9,4($23)
@@ -608,7 +624,7 @@ DesenhaCasa2:
     	ori $9,0x0000 # Preto
     	ori $17,0xff2400# vermehlo
     	ori $15,0xffff00#amarelo
-    	ori $16,0xffffff# Branco
+    	ori $16,0xDCDCDC# Branco
 
     	sw $9,0($6) # inicializa��o da primeira linha
     	sw $9,4($6)
@@ -1294,140 +1310,127 @@ ChecarColisao:
 	lw $10,200($24)
 	beq $10,$0,FimColisao
 	
-	lw $11,-512($10)
-	
-	
-	beq $11,$9,FimColisao
-	
-	beq $11,$13,ColidiuFloco
-	
-	beq $11,$12,ColidiuNavio
-	
-	beq $11,$8,ColidiuCombustivel
-	
-ColidiuNavio:
-	lw $10,200($24)
 	lw $13,800($24)
-	lw $14,1100($24)
-	
 	sub $15,$10,$13
-	bltz $15,ResetNavio2
-	addi $16,$0,2600
-	ble $15,$16,ResetNavio1
-ResetNavio2:
-	addi $15,$24,1100
-	j ExecutarResetNavio
+	bltz $15,TestaNavio2
+	#CALCULO X/Y
+	andi $17,$15,511 #Distancia Horizontal (X)
+	srl $18,$15,5 #Distancia Vertical (Y)
+	addi $16,$0,30 #Largura da checagem(aprox 20 pixels)
+	bgt $17,$16,TestaNavio2
+	addi $16,$0,4 #Altura da checagem (12 linhas)
+	ble $18,$16,ResetNavio1
+TestaNavio2:
+	lw $13,1100($24)
+	sub $15,$10,$13
+	bltz $15,TestaFloco
+	andi $17,$15,511
+	srl $18,$15,9
+	addi $16,$0,30
+	bgt $17,$16,TestaFloco
+	add $16,$0,4
+	ble $18,$16,ResetNavio2
+	j TestaFloco
 ResetNavio1:
 	addi $15,$24,800
+	j ExecutarResetNavio
+ResetNavio2:
+	addi $15,$24,1100
 ExecutarResetNavio:
 	lw $7,0($15)
-
-	addi $4, $0, 10		# Nota Sol
-	addi $5, $0, 400
-    	addi $6, $0, 12		# Instrumento
-        addi $7, $0, 300	# Volume
-	addi $2, $0, 31		
-	syscall
+	
+	jal ApagaNavio
+	jal SomExplosao
 	
 	lw $8,1000($24)
 	addi $8,$8,1
 	sw $8,1000($24)
 	
-	lw $7,0($15)
-	
-	jal ApagaNavio
-	
 	lw $4,0($15)
 	jal RandomizarSeguro
 	sw $2,0($15)
 	
-	lw $10,200($24)
-	beq $10,$0,PularApagaNavio
-	
-	addi $12,$0,0x000033ff
-	sw $12,0($10)
-	sw $12,4($10)
-PularApagaNavio:
-	sw $0,100($24)
-	sw $0,200($24)
-	j FimColisao
-ColidiuFloco:
-	lw $10,200($24)
+	j ApagarTiroNoFim
+TestaFloco:
 	lw $13,700($24)
-	lw $14,1200($24)
-	
-	sub $15,$10,$14
-	bgez $15,ChecarDistanciaFloco
-	sub $15,$0,$15
-ChecarDistanciaFloco:
-	addi $16,$0,5000
-	blt $15,$16,ResetFloco2
+	sub $15,$10,$13
+	bltz $15,TestaFloco2
+	andi $17,$15,511
+	srl $18,$15,9
+	addi $16,$0,30
+	bgt $17,$16,TestaFloco2
+	addi $16,$0,4
+	ble $18,$16,ResetFloco1
+TestaFloco2:
+	lw $13,1200($24)
+	sub $15,$10,$13
+	bltz $15,TestaCombustivel
+	andi $17,$15,511
+	srl $18,$15,9
+	addi $16,$0,30
+	bgt $17,$16,TestaCombustivel
+	addi $16,$0,4
+	ble $18,$16,ResetFloco2
+	j TestaCombustivel
+
 ResetFloco1:
 	addi $15,$24,700
 	j ExecutarResetFloco
 ResetFloco2:
 	addi $15,$24,1200
+	
+	j ExecutarResetFloco
 ExecutarResetFloco:
 	lw $7,0($15)
-	
-	addi $4, $0, 10		# Nota Sol
-	addi $5, $0,400
-    	addi $6, $0, 12		# Instrumento
-        addi $7, $0, 300	# Volume
-	addi $2, $0, 31		
-	syscall
+	jal ApagaFloco
+	jal SomExplosao
 	
 	lw $8,1000($24)
 	addi $8,$8,1
 	sw $8,1000($24)
 	
-	
-	lw $7,0($15)
-	
-	jal ApagaFloco
+	sw $8,1000($24)
 	
 	lw $4,0($15)
 	jal RandomizarSeguro
 	sw $2,0($15)
 	
-	lw $10,200($24)
-	beq $10,$0,PularApagaFloco
+	j ApagarTiroNoFim
+TestaCombustivel:
+	lw $13,400($24)
 	
-	addi $12,$0,0x000033ff
-	sw $12,0($10)
-	sw $12,4($10)
-PularApagaFloco:
-	sw $0,100($24)
-	sw $0,200($24)
-	j FimColisao
-ColidiuCombustivel:
-	lw $7,400($24)
+	sub $15,$10,$13
+	bltz $15,FimColisao
+	
+	andi $17,$15,511
+	srl $18,$15,9
+	
+	addi $16,$0,40
+	bgt $17,$16,FimColisao
+	
+	addi $16,$0,8
+	bgt $18,$16,FimColisao
 
-	addi $4, $0, 10		# Nota Sol
-	addi $5, $0, 400
-    	addi $6, $0, 12		# Instrumento
-        addi $7, $0, 300	# Volume
-	addi $2, $0, 31		
-	syscall
+	
 	
 	lw $7,400($24)
-	
 	jal ApagaCombustivel
+	jal SomExplosao
 	
 	lw $4,400($24)
 	jal RandomizarSeguro
 	sw $2,400($24)
 	
+	j ApagarTiroNoFim
+ApagarTiroNoFim:
 	lw $10,200($24)
-	beq $10,$0,PularApagaCombustivel
-	
 	addi $12,$0,0x000033ff
 	sw $12,0($10)
 	sw $12,4($10)
-PularApagaCombustivel:
+	
 	sw $0,100($24)
 	sw $0,200($24)
-	j FimColisao 
+	
 FimColisao:
 	lw $ra,0($sp)
 	lw $9,4($sp)
@@ -1444,23 +1447,50 @@ FimColisao:
 	addi $sp,$sp,44
 	jr $ra
 
-	
-ChecarColisaoInimigo:
+SomExplosao:
 	addi $sp,$sp,-4
 	sw $ra,0($sp)
 	
+	addi $4, $0, 10		# Nota Sol
+	addi $5, $0, 400
+    	addi $6, $0, 12		# Instrumento
+        addi $7, $0, 300	# Volume
+	addi $2, $0, 31		
+	syscall
+	
+	lw $ra,0($sp)
+	addi $sp,$sp,4
+	jr $ra
+ChecarColisaoInimigo:
+	addi $sp,$sp,-8
+	sw $ra,0($sp)
+	sw $22,4($sp)
+	
 	lw $27,800($24)
+	jal ChecaNavio
+	
+	lw $27,1100($24)
+	jal ChecaNavio
+	
+	
 	lw $26,700($24)
+	jal ChecaFloco
+	
+	
+	lw $26,1200($24)
+	jal ChecaFloco
+	
+	
+	lw $ra,0($sp)
+	addi $sp,$sp,4
+	jr $ra
+ChecaNavio:
+	beq $27,$0,Retorno
 	
 	sub $8,$3,$27 #$8 = (Endereço Avião) - (Endereço Navio)
 	abs $8,$8
-	# Testa se o navio está muito acima
-	
 	li $9,3500    ## 4500 bytes sao quase 9 linhas de distância
-	bgt $8,$9,ChecaFloco # Se a diferença > 4500, o avião está muito abaixo do navio
-	
-	
-	# SE O CODIGO CHEGOU AQUI ELES ESTAO NA MESA FAIXA DE LINHAS
+	bgt $8,$9,Retorno # Se a diferença > 4500, o avião está muito abaixo do navio
 	
 	# Teste de colunas
 	andi $10,$3,0x1ff # faz um and com endereço do aviao e 0x1ff para obter a coluna do aviao
@@ -1470,11 +1500,15 @@ ChecarColisaoInimigo:
 	abs $12,$12 # vira positivo
 	li $13,45 # Teste se estão a menos de 45 bytes
 	blt $12,$13,Game_over # game_over
+	
+	jr $ra
 ChecaFloco:
+	beq $26,$0,Retorno
+	
 	sub $8,$3,$26
 	abs $8,$8
 	li $9,3500
-	bgt $8,$9,FimColisaoInimigo
+	bgt $8,$9,Retorno
 	
 	andi $10,$3,0x1ff
 	andi $11,$26,0x1ff
@@ -1482,9 +1516,9 @@ ChecaFloco:
 	abs $12,$12
 	li $13,30
 	blt $12,$13,Game_over
-FimColisaoInimigo:
-	lw $ra,0($sp)
-	addi $sp,$sp,4
+	
+	jr $ra
+Retorno:
 	jr $ra
 Game_over:
 	addi $2,$0,10
