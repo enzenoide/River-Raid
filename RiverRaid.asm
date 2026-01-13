@@ -8,7 +8,7 @@ cenario:
     	lui $3,0x1001  # Endereço do aviao
     	addi $3,$3,45312
     	jal DesenhaAviao 
-    
+
 Entidades:
     	
 	lui $24,0x1001
@@ -61,15 +61,17 @@ Entidades:
     	jal DesenhaNavio
     	
     	sw $0,1000($24) #Contagem de Pontos
-    	
-    	
-    	sw $0,1100($24)
-    	
-    	
-    	sw $0,1200($24)
-    	
-    	
+    	sw $0,1100($24) #Navio2
+    	sw $0,1200($24) #Floco2
     
+    	lui $23,0x1001 # Endereço do Medidor
+    	addi $23,$23,57708
+    	sw $23,1300($24)
+    	addi $26,$0,0
+    	
+    	sw $0,1400($24) #Contagem para o medidor de combustivel
+    	
+	
     
 LoopJogo:
     	jal AtualizaJogador
@@ -170,11 +172,20 @@ SegueFloco2:
 	
 PrepararFim:
 	li $10,8000
-	blt $9,$10,FimCiclo
+	blt $9,$10,ChecarFrames
 	sw $0,300($24) 
-FimCiclo:
-    	jal timer_curto
+ChecarFrames:
+	lw $12,1400($24)
+    	addi $13,$0,600
+    	div $12,$13
+    	mfhi $14
+    	bne $14,$0,FimCiclo
     
+    	jal MoveMedidor
+FimCiclo:
+	addi $12,$12,1
+    	sw $12,1400($24)
+    	jal timer_curto
     	j LoopJogo
     
 ############################   
@@ -1312,6 +1323,7 @@ MoveCombustivel:
 	slt $9,$7,$8
 	bne $9,$0,PulaResetCombustivel
 	
+ResetCombustivel:
 	lw $4,400($24)
 	jal RandomizarSeguro
 	add $7,$0,$2
@@ -1368,7 +1380,39 @@ FimMoveTiro:
 	addiu $sp,$sp,20
 	
 	jr $ra
+MoveMedidor:
+	addi $sp,$sp,-20
+	sw $ra,0($sp)
+	sw $9,4($sp)
+	sw $17,8($sp)
+	sw $22,12($sp)
+	sw $19,16($sp)
 	
+	ori $9,0xFFFF00
+	lw $22,1300($24)
+	addi $17,$0,0
+LoopMedidor:
+	beq $17,9,FimMedidor
+	lw $19,-4($22)
+	addi $22,$22,-4
+	sw $9,0($22)
+	sw $19,4($22)
+AtualizaLinha:
+	addi $22,$22,516
+	addi $17,$17,1
+	j LoopMedidor
+FimMedidor:	
+	addi $22,$22,-4612
+	sw $22,1300($24)
+	
+	lw $ra,0($sp)
+	lw $9,4($sp)
+	lw $17,8($sp)
+	lw $22,12($sp)
+	lw $19,16($sp)
+	addi $sp,$sp,20
+	
+	jr $ra
 ChecarColisao:
 	addi $sp,$sp,-44
 	sw $ra,0($sp)
@@ -1563,6 +1607,8 @@ ChecarColisaoInimigo:
 	lw $26,1200($24)
 	jal ChecaFloco
 	
+	lw $26,400($24)
+	jal ChecaCombustivel
 	
 	lw $ra,0($sp)
 	addi $sp,$sp,4
@@ -1572,7 +1618,7 @@ ChecaNavio:
 	
 	sub $8,$3,$27 #$8 = (Endereço Avião) - (Endereço Navio)
 	abs $8,$8
-	li $9,3500    ## 4500 bytes sao quase 9 linhas de distância
+	li $9,2300    ## 4500 bytes sao quase 9 linhas de distância
 	bgt $8,$9,Retorno # Se a diferença > 4500, o avião está muito abaixo do navio
 	
 	# Teste de colunas
@@ -1590,7 +1636,7 @@ ChecaFloco:
 	
 	sub $8,$3,$26
 	abs $8,$8
-	li $9,3500
+	li $9,2300
 	bgt $8,$9,Retorno
 	
 	andi $10,$3,0x1ff
@@ -1601,6 +1647,26 @@ ChecaFloco:
 	blt $12,$13,Game_over
 	
 	jr $ra
+ChecaCombustivel:
+	beq $26,$0,Retorno
+	
+	sub $8,$3,$26
+	abs $8,$8
+	li $9,4100
+	bgt $8,$9,Retorno
+	
+	andi $10,$3,0x1ff
+	andi $11,$26,0x1ff
+	sub $12,$10,$11
+	abs $12,$12
+	li $13,30
+	blt $12,$13,ReiniciaCombustivel
+	
+	
+	jr $ra
+ReiniciaCombustivel:
+	jal ApagaCombustivel
+	jal ResetCombustivel
 Retorno:
 	jr $ra
 Game_over:
@@ -1985,7 +2051,7 @@ LoopSeguro:
 
 	
 DesenhaHUD:
-	addi $sp,$sp,-32
+	addi $sp,$sp,-36
 	sw $ra,0($sp)
 	sw $5,4($sp)
 	sw $6,8($sp)
@@ -1994,6 +2060,7 @@ DesenhaHUD:
 	sw $17,20($sp)
 	sw $18,24($sp)
 	sw $19,28($sp)
+	sw $10,32($sp)
 	
 
 	lui $5,0x1001         # fazer do hud algo separado do background
@@ -2005,6 +2072,7 @@ DesenhaHUD:
 	
 	ori $8,$0,0x404040	#cinzinha ne pai
 	ori $9,$0,0x000000
+	ori $10,$0,0xFFFF00
 	addi $18,$0,0 		# Contador de linhas
 LoopAltura:
 	addi $17,$0,0
@@ -2178,6 +2246,17 @@ LinhaInferior:
 	addi $6,$6,4
 	addi $17,$17,1
 	bne $17,45,LinhaInferior
+MedidorCombustivel:
+	addi $6,$6,-4616
+	sw $10,0($6)
+	sw $10,512($6)
+	sw $10,1024($6)
+	sw $10,1536($6)
+	sw $10,2048($6)
+	sw $10,2560($6)
+	sw $10,3072($6)
+	sw $10,3584($6)
+	sw $10,4096($6)
 FimBackground:
 	lw $ra,0($sp)
 	lw $5,4($sp)
@@ -2187,7 +2266,8 @@ FimBackground:
 	lw $17,20($sp)
 	lw $18,24($sp)
 	lw $19,28($sp)
-	addi $sp,$sp,32
+	lw $10,32($sp)
+	addi $sp,$sp,36
 	
 	jr $ra
 ##############################################
