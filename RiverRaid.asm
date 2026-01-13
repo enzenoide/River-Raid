@@ -26,7 +26,7 @@ Entidades:
     	lui $25,0x1001
     	addi $25,$25,252 # Endereço do combustivel
     	sw $25,400($24) 
-    	lw $25,400($24)
+    	lw $25,400($24)		
     	add $7,$0,$25
     	jal DesenhaCombustivel
     	
@@ -67,7 +67,6 @@ Entidades:
     	lui $23,0x1001 # Endereço do Medidor
     	addi $23,$23,57708
     	sw $23,1300($24)
-    	addi $26,$0,0
     	
     	sw $0,1400($24) #Contagem para o medidor de combustivel
     	
@@ -176,7 +175,7 @@ PrepararFim:
 	sw $0,300($24) 
 ChecarFrames:
 	lw $12,1400($24)
-    	addi $13,$0,600
+    	addi $13,$0,1000
     	div $12,$13
     	mfhi $14
     	bne $14,$0,FimCiclo
@@ -1323,10 +1322,25 @@ MoveCombustivel:
 	slt $9,$7,$8
 	bne $9,$0,PulaResetCombustivel
 	
-ResetCombustivel:
+ResetCombustivelEnd: #resetar quando chega no fim
 	lw $4,400($24)
 	jal RandomizarSeguro
 	add $7,$0,$2
+	
+	j PulaResetCombustivel
+ResetCombustivelInimigo: #resetar quando bate no aviao	
+	addi $sp,$sp,-8
+	sw $ra,0($sp)
+	sw $4,4($sp)
+	
+	lw $4,400($24)
+	jal RandomizarSeguro
+	add $7,$0,$2
+	
+	lw $ra,0($sp)
+	lw $4,4($sp)
+	addi $sp,$sp,8
+	jr $ra
 PulaResetCombustivel:
 	sw $7,400($24)
 	jal DesenhaCombustivel
@@ -1411,6 +1425,58 @@ FimMedidor:
 	lw $22,12($sp)
 	lw $19,16($sp)
 	addi $sp,$sp,20
+	
+	jr $ra
+IncrementaMedidor:
+	addi $sp,$sp,-32
+	sw $ra,0($sp)
+	sw $9,4($sp)
+	sw $17,8($sp)
+	sw $22,12($sp)
+	sw $19,16($sp)
+	sw $18,20($sp)
+	sw $16,24($sp)
+	sw $20,28($sp)
+	
+	
+	
+	ori $9,0xFFFF00
+	lw $22,1300($24)
+	addi $18,$0,0
+	addi $17,$0,0
+	lui $16,0x1001
+	addi $16,$16,57712
+	
+LoopExterno:
+	beq $18,1,FimLoop
+LoopInterno:
+	beq $17,9,FimLoopInterno
+	lw $19,4($22)
+	addi $20,$22,4
+	beq $20,$16,FimLoop
+	addi $22,$22,4
+	sw $9,0($22)
+	sw $19,-4($22)
+	addi $22,$22,508
+	addi $17,$17,1
+	j LoopInterno
+FimLoopInterno:	
+	addi $22,$22,-4604
+	addi $18,$18,1
+	addi $17,$0,0
+	j LoopExterno
+FimLoop:
+	sw $22,1300($24)
+	
+	lw $ra,0($sp)
+	lw $9,4($sp)
+	lw $17,8($sp)
+	lw $22,12($sp)
+	lw $19,16($sp)
+	lw $18,20($sp)
+	lw $16,24($sp)
+	lw $20,28($sp)
+	addi $sp,$sp,32
 	
 	jr $ra
 ChecarColisao:
@@ -1665,8 +1731,13 @@ ChecaCombustivel:
 	
 	jr $ra
 ReiniciaCombustivel:
+	addi $sp,$sp,-4
+	sw $ra,0($sp)
 	jal ApagaCombustivel
-	jal ResetCombustivel
+	jal ResetCombustivelInimigo
+	jal IncrementaMedidor
+	lw $ra,0($sp)
+	addi $sp,$sp,4
 Retorno:
 	jr $ra
 Game_over:
