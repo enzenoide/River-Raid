@@ -175,7 +175,7 @@ PrepararFim:
 	sw $0,300($24) 
 ChecarFrames:
 	lw $12,1400($24)
-    	addi $13,$0,1000
+    	addi $13,$0,800
     	div $12,$13
     	mfhi $14
     	bne $14,$0,FimCiclo
@@ -1329,17 +1329,18 @@ ResetCombustivelEnd: #resetar quando chega no fim
 	
 	j PulaResetCombustivel
 ResetCombustivelInimigo: #resetar quando bate no aviao	
-	addi $sp,$sp,-8
+	addi $sp,$sp,-4
 	sw $ra,0($sp)
-	sw $4,4($sp)
-	
+		
 	lw $4,400($24)
 	jal RandomizarSeguro
 	add $7,$0,$2
 	
+	sw $7,400($24)
+	jal DesenhaCombustivel
+	
 	lw $ra,0($sp)
-	lw $4,4($sp)
-	addi $sp,$sp,8
+	addi $sp,$sp,4
 	jr $ra
 PulaResetCombustivel:
 	sw $7,400($24)
@@ -1405,9 +1406,13 @@ MoveMedidor:
 	ori $9,0xFFFF00
 	lw $22,1300($24)
 	addi $17,$0,0
+	lui $16,0x1001
+	addi $16,$16,57536
 LoopMedidor:
 	beq $17,9,FimMedidor
 	lw $19,-4($22)
+	add $20,$22,-4
+	beq $20,$16,Game_over
 	addi $22,$22,-4
 	sw $9,0($22)
 	sw $19,4($22)
@@ -1448,7 +1453,7 @@ IncrementaMedidor:
 	addi $16,$16,57712
 	
 LoopExterno:
-	beq $18,1,FimLoop
+	beq $18,10,FimLoop
 LoopInterno:
 	beq $17,9,FimLoopInterno
 	lw $19,4($22)
@@ -1492,38 +1497,50 @@ ChecarColisao:
 	sw $6,32($sp)
 	sw $7,36($sp)
 	sw $2,40($sp)
-	
-	addi $8,$0,0xFF4500
-	addi $9,$0,0x000033ff #Azul
-	addi $12,$0,0x00000000 #Preto
-	addi $13,$0,0x00f0f8ff # Floco
-	
-	
-	
+
 	lw $10,200($24)
 	beq $10,$0,FimColisao
 	
-	lw $13,800($24)
-	sub $15,$10,$13
-	bltz $15,TestaNavio2
-	#CALCULO X/Y
-	andi $17,$15,511 #Distancia Horizontal (X)
-	srl $18,$15,5 #Distancia Vertical (Y)
-	addi $16,$0,30 #Largura da checagem(aprox 20 pixels)
-	bgt $17,$16,TestaNavio2
-	addi $16,$0,4 #Altura da checagem (12 linhas)
-	ble $18,$16,ResetNavio1
+	lw $13,800($24) #Endereço base do navio
+	beq $13,$0,TestaNavio2 #Se não houver navio,pula
+	
+	sub $15,$10,$13 #Diferença total de endereços
+	abs $15,$15 # Valor absoluto para não importar quem vem antes
+	srl $18,$15,9 #Divide por 512 para pegar a diferença de linhas
+	addi $16,$0,4 #Altura do Navio em linhas
+	bgt $18,$16,TestaNavio2  #Se estiver muito longe verticalmente,pula
+	
+	andi $11,$10,0x1FF #X do tiro (endereço do tiro and 511)
+	andi $12,$13,0x1FF #X do navio(endereço do navio and 511)
+	
+	sub $17,$11,$12 #Diferença X = X-tiro - X-navio
+	abs $17,$17
+	
+	addi $16,$0,30 #Largura da caixa de colisao
+	bgt $17,$16, TestaNavio2 # Se a distancia X for maior que a largura, não colidiu
+	
+	j ResetNavio1 #Se passou nos dois testes, colidiu
 TestaNavio2:
 	lw $13,1100($24)
+	beq $13,$0,TestaFloco
+	
 	sub $15,$10,$13
-	bltz $15,TestaFloco
-	andi $17,$15,511
+	abs $15,$15
 	srl $18,$15,9
+	addi $16,$0,4
+	bgt $18,$16,TestaFloco
+	
+	andi $11,$10,0x1FF
+	andi $12,$13,0x1FF
+	
+	sub $17,$11,$12
+	abs $17,$17
+	
 	addi $16,$0,30
-	bgt $17,$16,TestaFloco
-	add $16,$0,4
-	ble $18,$16,ResetNavio2
-	j TestaFloco
+	bgt $17,$16, TestaFloco
+	
+	
+	j ResetNavio2
 ResetNavio1:
 	addi $15,$24,800
 	j ExecutarResetNavio
@@ -1546,26 +1563,44 @@ ExecutarResetNavio:
 	j ApagarTiroNoFim
 TestaFloco:
 	lw $13,700($24)
+	beq $13,$0,TestaFloco2
+	
 	sub $15,$10,$13
-	bltz $15,TestaFloco2
-	andi $17,$15,511
+	abs $15,$15
 	srl $18,$15,9
-	addi $16,$0,30
-	bgt $17,$16,TestaFloco2
 	addi $16,$0,4
-	ble $18,$16,ResetFloco1
+	bgt $18,$16,TestaFloco2
+	
+	andi $11,$10,0x1FF
+	andi $12,$13,0x1FF
+	
+	sub $17,$11,$12
+	abs $17,$17
+	
+	addi $16,$0,20
+	bgt $17,$16,TestaFloco2
+	
+	j ResetFloco1
 TestaFloco2:
 	lw $13,1200($24)
+	beq $13,$0,TestaCombustivel
+	
 	sub $15,$10,$13
-	bltz $15,TestaCombustivel
-	andi $17,$15,511
+	abs $15,$15
 	srl $18,$15,9
-	addi $16,$0,30
-	bgt $17,$16,TestaCombustivel
 	addi $16,$0,4
-	ble $18,$16,ResetFloco2
-	j TestaCombustivel
-
+	bgt $18,$16,TestaCombustivel
+	
+	andi $11,$10,0x1FF
+	andi $12,$13,0x1FF
+	
+	sub $17,$11,$12
+	abs $17,$17
+	
+	addi $16,$0,20
+	bgt $17,$16,TestaCombustivel
+	
+	j ResetFloco2
 ResetFloco1:
 	addi $15,$24,700
 	j ExecutarResetFloco
@@ -1591,20 +1626,23 @@ ExecutarResetFloco:
 	j ApagarTiroNoFim
 TestaCombustivel:
 	lw $13,400($24)
+	beq $13,$0,FimColisao
 	
 	sub $15,$10,$13
-	bltz $15,FimColisao
-	
-	andi $17,$15,511
+	abs $15,$15
 	srl $18,$15,9
-	
-	addi $16,$0,40
-	bgt $17,$16,FimColisao
 	
 	addi $16,$0,8
 	bgt $18,$16,FimColisao
-
 	
+	andi $11,$10,0x1FF
+	andi $12,$13,0x1FF
+	
+	sub $17,$11,$12
+	abs $17,$17
+	
+	addi $16,$0,20
+	bgt $17,$16,FimColisao
 	
 	lw $7,400($24)
 	jal ApagaCombustivel
@@ -1657,7 +1695,6 @@ SomExplosao:
 ChecarColisaoInimigo:
 	addi $sp,$sp,-8
 	sw $ra,0($sp)
-	sw $22,4($sp)
 	
 	lw $27,800($24)
 	jal ChecaNavio
@@ -1733,11 +1770,16 @@ ChecaCombustivel:
 ReiniciaCombustivel:
 	addi $sp,$sp,-4
 	sw $ra,0($sp)
+	
+	add $7,$0,$26
+	
 	jal ApagaCombustivel
 	jal ResetCombustivelInimigo
 	jal IncrementaMedidor
 	lw $ra,0($sp)
 	addi $sp,$sp,4
+	
+	jr $ra
 Retorno:
 	jr $ra
 Game_over:
