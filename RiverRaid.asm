@@ -1,16 +1,13 @@
 _init_:
     	lui  $16, 0x1001
 cenario:      
-
     	jal DesenhaSplash
     	jal DesenhaHUD
     	jal DesenhaMapa
     	lui $3,0x1001  # Endereço do aviao
     	addi $3,$3,45312
     	jal DesenhaAviao 
-
 Entidades:
-    	
 	lui $24,0x1001
     	addi $24,$24,76000
     
