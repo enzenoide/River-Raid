@@ -5,7 +5,7 @@ cenario:
     	jal DesenhaSplash
     	jal DesenhaHUD
     	jal DesenhaMapa
-    	lui $3,0x1001  # EndereÃ§o do aviao
+    	lui $3,0x1001  # Endereço do aviao
     	addi $3,$3,45312
     	jal DesenhaAviao 
 
@@ -17,14 +17,14 @@ Entidades:
     	sw $0,100($24) #Flag do tiro, 1 se estiver ativo, 0 ao contrario
     	
     	lui $25,0x1001
-    	addi $25,$25,18176 # EndereÃ§o do tiro
-    	sw $25,200($24) # EndereÃ§o do tiro
+    	addi $25,$25,18176 # Endereço do tiro
+    	sw $25,200($24) # Endereço do tiro
     	
     	sw $0,300($24) #Contador de frames
     	
     	
     	lui $25,0x1001
-    	addi $25,$25,252 # EndereÃ§o do combustivel
+    	addi $25,$25,252 # Endereço do combustivel
     	sw $25,400($24) 
     	lw $25,400($24)		
     	add $7,$0,$25
@@ -45,7 +45,7 @@ Entidades:
     	add $7,$0,$25
     	jal DesenhaCasa2
     
-    	lui $25,0x1001 # EndereÃ§o do floco de neve
+    	lui $25,0x1001 # Endereço do floco de neve
     	addi $25,$25,184
     	sw $25,700($24)
     	lw $25,700($24)
@@ -53,7 +53,7 @@ Entidades:
     	jal DesenhaFloco
 
 
-    	lui $25,0x1001 # EndereÃ§o do Navio
+    	lui $25,0x1001 # Endereço do Navio
     	addi $25,$25,320
     	sw $25,800($24)
     	lw $25,800($24)
@@ -64,7 +64,7 @@ Entidades:
     	sw $0,1100($24) #Navio2
     	sw $0,1200($24) #Floco2
     
-    	lui $23,0x1001 # EndereÃ§o do Medidor
+    	lui $23,0x1001 # Endereço do Medidor
     	addi $23,$23,57708
     	sw $23,1300($24)
     	
@@ -379,7 +379,7 @@ DesenhaCasa:
     	ori $15,0xffff00#amarelo
     	ori $16,0xDCDCDC# Branco
 	
-    	sw $9,0($23)# inicializaï¿½ï¿½o da primeira linha
+    	sw $9,0($23)# inicializa??o da primeira linha
     	sw $9,4($23)
     	sw $9,8($23)
     	sw $9,12($23)
@@ -395,7 +395,7 @@ DesenhaCasa:
 
     	sw $18,496($23)
 	
-    	sw $9,508($23) # inicializaï¿½ï¿½o da segunda linha
+    	sw $9,508($23) # inicializa??o da segunda linha
     	sw $9,512($23)
     	sw $18,516($23)
     	sw $15,520($23)
@@ -439,7 +439,7 @@ DesenhaCasa:
     	sw $18,1524($23)
 	sw $15,1528($23)
     
-    	sw $16,1536($23) # inicializaï¿½ï¿½o da quarta linha
+    	sw $16,1536($23) # inicializa??o da quarta linha
     	#sw $3,-13812($24) janela
     	#sw $3,-13808($24) janela
     	sw $16,1548($23)
@@ -489,7 +489,7 @@ ApagaCasa:
 	addi $19,$0,0
 	ori  $19,$0,0x8000 # COR VERDE
 	
-   	sw $19,0($7)# inicializaï¿½ï¿½o da primeira linha
+   	sw $19,0($7)# inicializa??o da primeira linha
     	sw $19,4($7)
     	sw $19,8($7)
     	sw $19,12($7)
@@ -505,7 +505,7 @@ ApagaCasa:
 
     	sw $19,496($7)
 	
-    	sw $19,508($7) # inicializaï¿½ï¿½o da segunda linha
+    	sw $19,508($7) # inicializa??o da segunda linha
     	sw $19,512($7)
     	sw $19,516($7)
     	sw $19,520($7)
@@ -549,7 +549,7 @@ ApagaCasa:
     	sw $19,1524($7)
 	sw $19,1528($7)
     
-    	sw $19,1536($7) # inicializaï¿½ï¿½o da quarta linha
+    	sw $19,1536($7) # inicializa??o da quarta linha
     	#sw $3,-13812($24) janela
     	#sw $3,-13808($24) janela
     	sw $19,1548($7)
@@ -643,7 +643,7 @@ DesenhaCasa2:
     	ori $15,0xffff00#amarelo
     	ori $16,0xDCDCDC# Branco
 
-    	sw $9,0($6) # inicializaï¿½ï¿½o da primeira linha
+    	sw $9,0($6) # inicializa??o da primeira linha
     	sw $9,4($6)
     	sw $9,8($6)
     	sw $9,12($6)
@@ -658,7 +658,7 @@ DesenhaCasa2:
 
 #########################
 
-    	sw $9,508($6) # inicializaï¿½ï¿½o da segunda linha
+    	sw $9,508($6) # inicializa??o da segunda linha
     	sw $9,512($6)
     	sw $18,516($6)
     	sw $15,520($6)
@@ -677,7 +677,7 @@ DesenhaCasa2:
 
 #########################
 
-    	sw $15,1024($6) # inicializaï¿½ï¿½o da terceira linha
+    	sw $15,1024($6) # inicializa??o da terceira linha
     	sw $16,1028($6)
     	sw $16,1032($6)
     	sw $16,1036($6)
@@ -696,7 +696,7 @@ DesenhaCasa2:
 
 #########################
 
-    	sw $16,1536($6) # inicializaï¿½ï¿½o da quarta linha
+    	sw $16,1536($6) # inicializa??o da quarta linha
     	#sw $3,-3692($24) janela
     	#sw $3,-3688($24) janela
     	sw $16,1548($6)
@@ -717,7 +717,7 @@ DesenhaCasa2:
 
 #########################
 
-    	sw $16,2048($6) # inicializaï¿½ï¿½o da quinta linha
+    	sw $16,2048($6) # inicializa??o da quinta linha
     	sw $16,2052($6)
     	sw $16,2056($6)
     	sw $16,2060($6)
@@ -751,7 +751,7 @@ ApagaCasa2:
 	addi $19,$0,0
 	ori  $19,$0,0x8000 # COR VERDE
 	
-   	sw $19,0($7) # inicializaï¿½ï¿½o da primeira linha
+   	sw $19,0($7) # inicializa??o da primeira linha
     	sw $19,4($7)
     	sw $19,8($7)
     	sw $19,12($7)
@@ -766,7 +766,7 @@ ApagaCasa2:
 
 #########################
 
-    	sw $19,508($7) # inicializaï¿½ï¿½o da segunda linha
+    	sw $19,508($7) # inicializa??o da segunda linha
     	sw $19,512($7)
     	sw $19,516($7)
     	sw $19,520($7)
@@ -785,7 +785,7 @@ ApagaCasa2:
 
 #########################
 
-    	sw $19,1024($7) # inicializaï¿½ï¿½o da terceira linha
+    	sw $19,1024($7) # inicializa??o da terceira linha
     	sw $19,1028($7)
     	sw $19,1032($7)
     	sw $19,1036($7)
@@ -804,7 +804,7 @@ ApagaCasa2:
 
 #########################
 
-    	sw $19,1536($7) # inicializaï¿½ï¿½o da quarta linha
+    	sw $19,1536($7) # inicializa??o da quarta linha
     	#sw $3,-3692($24) janela
     	#sw $3,-3688($24) janela
     	sw $19,1548($7)
@@ -825,7 +825,7 @@ ApagaCasa2:
 
 #########################
 
-    	sw $19,2048($7) # inicializaï¿½ï¿½o da quinta linha
+    	sw $19,2048($7) # inicializa??o da quinta linha
     	sw $19,2052($7)
     	sw $19,2056($7)
     	sw $19,2060($7)
@@ -1507,23 +1507,23 @@ ChecarColisao:
 	lw $10,200($24)
 	beq $10,$0,FimColisao
 	
-	lw $13,800($24) #EndereÃ§o base do navio
-	beq $13,$0,TestaNavio2 #Se nÃ£o houver navio,pula
+	lw $13,800($24) #Endereço base do navio
+	beq $13,$0,TestaNavio2 #Se não houver navio,pula
 	
-	sub $15,$10,$13 #DiferenÃ§a total de endereÃ§os
-	abs $15,$15 # Valor absoluto para nÃ£o importar quem vem antes
-	srl $18,$15,9 #Divide por 512 para pegar a diferenÃ§a de linhas
+	sub $15,$10,$13 #Diferença total de endereços
+	abs $15,$15 # Valor absoluto para não importar quem vem antes
+	srl $18,$15,9 #Divide por 512 para pegar a diferença de linhas
 	addi $16,$0,4 #Altura do Navio em linhas
 	bgt $18,$16,TestaNavio2  #Se estiver muito longe verticalmente,pula
 	
-	andi $11,$10,0x1FF #X do tiro (endereÃ§o do tiro and 511)
-	andi $12,$13,0x1FF #X do navio(endereÃ§o do navio and 511)
+	andi $11,$10,0x1FF #X do tiro (endereço do tiro and 511)
+	andi $12,$13,0x1FF #X do navio(endereço do navio and 511)
 	
-	sub $17,$11,$12 #DiferenÃ§a X = X-tiro - X-navio
+	sub $17,$11,$12 #Diferença X = X-tiro - X-navio
 	abs $17,$17
 	
 	addi $16,$0,30 #Largura da caixa de colisao
-	bgt $17,$16, TestaNavio2 # Se a distancia X for maior que a largura, nÃ£o colidiu
+	bgt $17,$16, TestaNavio2 # Se a distancia X for maior que a largura, não colidiu
 	
 	j ResetNavio1 #Se passou nos dois testes, colidiu
 TestaNavio2:
@@ -1735,18 +1735,18 @@ ChecarColisaoInimigo:
 ChecaNavio:
 	beq $27,$0,Retorno
 	
-	sub $8,$3,$27 #$8 = (EndereÃ§o AviÃ£o) - (EndereÃ§o Navio)
+	sub $8,$3,$27 #$8 = (Endereço Avião) - (Endereço Navio)
 	abs $8,$8
-	li $9,2300    ## 4500 bytes sao quase 9 linhas de distÃ¢ncia
-	bgt $8,$9,Retorno # Se a diferenÃ§a > 4500, o aviÃ£o estÃ¡ muito abaixo do navio
+	li $9,2300    ## 4500 bytes sao quase 9 linhas de distância
+	bgt $8,$9,Retorno # Se a diferença > 4500, o avião está muito abaixo do navio
 	
 	# Teste de colunas
-	andi $10,$3,0x1ff # faz um and com endereÃ§o do aviao e 0x1ff para obter a coluna do aviao
-	andi $11,$27,0x1ff # faz um and com endereÃ§o do navio e 0x1ff para obter a coluna do navio
+	andi $10,$3,0x1ff # faz um and com endereço do aviao e 0x1ff para obter a coluna do aviao
+	andi $11,$27,0x1ff # faz um and com endereço do navio e 0x1ff para obter a coluna do navio
 	sub $12,$10,$11 # 12 =  distancia entre as colunas
 	
 	abs $12,$12 # vira positivo
-	li $13,45 # Teste se estÃ£o a menos de 45 bytes
+	li $13,45 # Teste se estão a menos de 45 bytes
 	blt $12,$13,Game_over # game_over
 	
 	jr $ra
@@ -1895,7 +1895,7 @@ moveR:
 	
 	
 	
-	addi $3,$3,4 #SALVAR A POSIï¿½ï¿½O 4 BYTES ATRAS
+	addi $3,$3,4 #SALVAR A POSI??O 4 BYTES ATRAS
 	################
 	sw $15, 0($3) 
 	sw $15, 4($3) 
@@ -2015,7 +2015,7 @@ moveL:
 
 	sw $14, 4108($3)
 	
-	addi $3,$3,-4 #SALVAR A POSIï¿½ï¿½O 4 BYTES ATRAS
+	addi $3,$3,-4 #SALVAR A POSI??O 4 BYTES ATRAS
 	################
 	sw $15, 0($3) 
 	sw $15, 4($3) 
@@ -2169,9 +2169,9 @@ DesenhaPontos:
 	lui $8,0x1001
 	lui $16,0x1001
 	lui $22,0x1001
-	addi $8,$8,51032 #EndereÃ§o do primeiro numero
-	addi $16,$16,51000 #EndereÃ§o do segundo numero
-	addi $22,$22,50972 # EndereÃ§o do terceiro numero
+	addi $8,$8,51032 #Endereço do primeiro numero
+	addi $16,$16,51000 #Endereço do segundo numero
+	addi $22,$22,50972 # Endereço do terceiro numero
 	
 	ori $11,$0,0x404040 #Cinza
 	ori $9,$0,0xFFFF00 #Amarel
@@ -2183,7 +2183,7 @@ ApagarTerceiro:
 ApagarSegundo:
 	j ApagaSegundoPonto
 	
-# PARTE OBSCURA DO CÃ“DIGO
+# PARTE OBSCURA DO CÓDIGO
 ChecaPontos:
 	beq $21,1,p_10
 	beq $21,2,p_20
@@ -2978,7 +2978,7 @@ FimBackground:
 
 ApagaEntidade:
 
-	sw $19,0($24) #inicializaï¿½ï¿½o da primeira linha
+	sw $19,0($24) #inicializa??o da primeira linha
     	sw $19,4($24)
     	sw $19, 8($24) 
     	sw $19,12($24)
@@ -2993,7 +2993,7 @@ ApagaEntidade:
 
 #########################
     	    	
-    	sw $19,508($24) #inicializaï¿½ï¿½o da segunda linha
+    	sw $19,508($24) #inicializa??o da segunda linha
     	sw $19,512($24) 
     	sw $19,516($24)
     	sw $19,520($24)
@@ -3012,7 +3012,7 @@ ApagaEntidade:
 
 #########################
     		
-    	sw $19,1024($24) #inicializaï¿½ï¿½o da terceira linha
+    	sw $19,1024($24) #inicializa??o da terceira linha
     	sw $19,1028($24)
     	sw $19,1032($24)
     	sw $19,1036($24)
@@ -3032,7 +3032,7 @@ ApagaEntidade:
 
 #########################
     	
-    	sw $19,1536($24) #inicializaï¿½ï¿½o da quarta linha
+    	sw $19,1536($24) #inicializa??o da quarta linha
     	#sw $3, 1540($24) janela
 	#sw $3, 1544($24) janela
     	sw $19,1548($24)
@@ -3053,7 +3053,7 @@ ApagaEntidade:
     
 ########################
     
-    	sw $19,2048($24) #inicializaï¿½ï¿½o da quinta linha
+    	sw $19,2048($24) #inicializa??o da quinta linha
     	sw $19,2052($24)
     	sw $19,2056($24)
     	sw $19,2060($24)
@@ -3592,16 +3592,462 @@ DesenhaSplash:
 	sw $15, 22644($27)
 	sw $15, 22648($27)
 	sw $15, 22652($27)
+
+	################
+	# PRESSIONE
+	################
+	
+    sw $15, 27088($27)
+    sw $15, 27092($27)
+    sw $15, 27096($27)
+    sw $15, 27100($27)
+
+    sw $15, 27116($27)
+    sw $15, 27120($27)
+    sw $15, 27124($27)
+    sw $15, 27128($27)
+
+    sw $15, 27144($27)
+    sw $15, 27148($27)
+    sw $15, 27152($27)
+    sw $15, 27156($27)
+
+    sw $15, 27172($27)
+    sw $15, 27176($27)
+    sw $15, 27180($27)
+
+    sw $15, 27196($27)
+    sw $15, 27200($27)
+    sw $15, 27204($27)
+
+    sw $15, 27220($27)
+
+    sw $15, 27236($27)
+    sw $15, 27240($27)
+    sw $15, 27244($27)
+    sw $15, 27248($27)
+
+    sw $15, 27264($27)
+    sw $15, 27284($27)
+
+    sw $15, 27300($27)
+    sw $15, 27304($27)
+    sw $15, 27308($27)
+    sw $15, 27312($27)
+
 	
 	################
+	
+	sw $15, 27600($27)
+   	sw $15, 27616($27)
+	
+	sw $15, 27628($27)
+	sw $15, 27644($27)
+	
+	sw $15, 27656($27)
+	
+	sw $15, 27680($27)
+	sw $15, 27704($27)
+	
+	sw $15, 27732($27)
+	
+	sw $15, 27744($27)
+	sw $15, 27764($27)
+	
+	sw $15, 27776($27)
+	sw $15, 27780($27)
+	
+    	sw $15, 27796($27)
+    	
+    	sw $15, 27812($27)
+	################
+	
+	sw $15, 28112($27)
+	sw $15, 28128($27)
+	
+	sw $15, 28140($27)
+	sw $15, 28156($27)
+	
+	sw $15 28168($27)
+	
+	sw $15, 28192($27)
+	
+	sw $15, 28216($27)
+	
+	sw $15, 28244($27)
+	
+	sw $15, 28256($27)
+	sw $15, 28276($27)
+	
+	sw $15, 28288($27)
+	sw $15, 28296($27)
+	
+    	sw $15, 28308($27)
+    	
+    	sw $15, 28324($27)
+	###############
+	
+	sw $15, 28624($27)
+	sw $15, 28640($27)
+	
+	sw $15, 28652($27)
+	
+	sw $15, 28668($27)
+	
+	sw $15, 28680($27)
+	
+	sw $15, 28704($27)
+	
+	sw $15, 28728($27)
+	
+	sw $15, 28756($27)
+	
+	sw $15, 28768($27)
+	sw $15, 28788($27)
+	
+	sw $15, 28800($27)
+	sw $15, 28812($27)
+	
+    	sw $15, 28820($27)
+    	
+    	sw $15, 28836($27)
+	###############
+	
+	sw $15, 29136($27)
+	sw $15, 29140($27)
+	sw $15, 29144($27)
+	sw $15, 29148($27)
+	
+	sw $15, 29164($27)
+	sw $15, 29168($27)
+	sw $15, 29172($27)
+	sw $15, 29176($27)
+
+	sw $15, 29192($27)
+	sw $15, 29196($27)
+	sw $15, 29200($27)
+	
+	sw $15, 29220($27)
+	sw $15, 29224($27)
+	sw $15, 29228($27)
+	
+	sw $15, 29244($27)
+	sw $15, 29248($27)
+	sw $15, 29252($27)
+	
+	sw $15, 29268($27)
+	
+	sw $15, 29280($27)
+	sw $15, 29300($27)
+	
+	sw $15, 29312($27)
+	sw $15, 29328($27)
+	
+    	sw $15, 29332($27)
+    	
+    	sw $15, 29348($27)
+    	sw $15, 29352($27)
+    	sw $15, 29356($27)
+	################
+	
+	sw $15, 29648($27)
+	
+	sw $15, 29676($27)
+	sw $15, 29680($27)
+	
+	sw $15, 29704($27)
+	
+	sw $15, 29744($27)
+	
+	sw $15, 29768($27)
+	
+	sw $15, 29780($27)
+	
+	sw $15, 29792($27)
+	sw $15, 29812($27)
+	
+	sw $15, 29824($27)
+	
+    	sw $15, 29844($27)
+    	
+    	sw $15, 29860($27)
+	################
+	
+	sw $15, 30160($27)
+
+	sw $15, 30188($27)
+	sw $15, 30196($27)
+	
+	sw $15, 30216($27)
+	
+	sw $15, 30256($27)
+	
+	sw $15, 30280($27)
+	
+	sw $15, 30292($27)
+	
+	sw $15, 30304($27)
+	sw $15, 30324($27)
+	
+	sw $15, 30336($27)
+	
+    	sw $15, 30356($27)
+    	
+    	sw $15, 30372($27)
+	################
+	
+	sw $15, 30672($27)
+	
+	sw $15, 30700($27)
+	sw $15, 30712($27)
+	
+	sw $15, 30728($27)
+	sw $15, 30732($27)
+	sw $15, 30736($27)
+	sw $15, 30740($27)
+	
+
+	sw $15, 30756($27)
+	sw $15, 30760($27)
+	sw $15, 30764($27)
+	
+	sw $15, 30780($27)
+	sw $15, 30784($27)
+	sw $15, 30788($27)
+	
+	sw $15, 30804($27)
+	
+	sw $15, 30820($27)
+	sw $15, 30824($27)
+	sw $15, 30828($27)
+	sw $15, 30832($27)
+	
+	sw $15, 30848($27)
+	
+    	sw $15, 30868($27)
+    	
+    	sw $15, 30884($27)
+    	sw $15, 30888($27)
+    	sw $15, 30892($27)
+    	sw $15, 30896($27)
+	################
+	#ESPAÇO
+	################
+	sw $15, 32244($27)
+    	sw $15, 32248($27)
+    	sw $15, 32252($27)
+    	sw $15, 32256($27)
+    
+    	sw $15, 32272($27)
+    	sw $15, 32276($27)
+    	sw $15, 32280($27)
+    
+    	sw $15, 32292($27)
+    	sw $15, 32296($27)
+    	sw $15, 32300($27)
+    	sw $15, 32304($27)
+    
+    	sw $15, 32328($27)
+    	
+    	
+    	sw $15, 32352($27)
+    	sw $15, 32356($27)
+    	sw $15, 32360($27)
+    	sw $15, 32364($27)
+    
+    	sw $15, 32380($27)
+    	sw $15, 32384($27)
+    	sw $15, 32388($27)
+    	sw $15, 32392($27)
+	####################]
+	
+	sw $15, 32756($27)
+	
+	sw $15, 32780($27)
+	
+	sw $15, 32804($27)
+	sw $15, 32820($27)
+	
+	sw $15, 32836($27)
+	sw $15, 32844($27)
+	
+	sw $15, 32860($27)
+	
+	sw $15, 32888($27)
+	sw $15, 32908($27)
+	####################]
+	
+	sw $15, 33268($27)
+	
+	sw $15, 33292($27)
+	
+	sw $15, 33316($27)
+	sw $15, 33332($27)
+	
+	sw $15, 33348($27)
+	sw $15, 33356($27)
+	
+	sw $15, 33372($27)
+	
+	sw $15, 33400($27)
+	sw $15, 33420($27)
+	####################]
+	
+	sw $15, 33780($27)
+	
+	sw $15, 33804($27)
+	
+	sw $15, 33828($27)
+	sw $15, 33844($27)
+	
+	sw $15, 33856($27)
+	sw $15, 33872($27)
+	
+	sw $15, 33884($27)
+	
+	sw $15, 33912($27)
+	sw $15, 33932($27)
+	####################]
+	
+	sw $15, 34292($27)
+	sw $15, 34296($27)
+	sw $15, 34300($27)	
+	
+	sw $15, 34320($27)	
+	sw $15, 34324($27)
+	sw $15, 34328($27)
+	
+	sw $15, 34340($27)
+	sw $15, 34344($27)	
+	sw $15, 34348($27)
+	sw $15, 34352($27)	
+	
+	sw $15, 34368($27)
+	sw $15, 34384($27)	
+	
+	sw $15, 34396($27)
+	
+	sw $15, 34424($27)
+	sw $15, 34444($27)
+	####################]
+	
+	sw $15, 34804($27)
+	
+	sw $15, 34844($27)
+	
+	sw $15, 34852($27)
+	
+	sw $15, 34880($27)
+	sw $15, 34884($27)
+	sw $15, 34888($27)
+	sw $15, 34892($27)
+	sw $15, 34896($27)
+	
+	sw $15, 34908($27)
+	
+	sw $15, 34936($27)
+	sw $15, 34956($27)
+	####################]
+	
+	sw $15, 35316($27)
+	
+	sw $15, 35356($27)
+	
+	sw $15, 35364($27)
+	
+	sw $15, 35388($27)
+	sw $15, 35412($27)
+	
+	sw $15, 35420($27)
+	
+	sw $15, 35448($27)
+	sw $15, 35468($27)
+	####################]
+	
+	sw $15, 35828($27)
+	sw $15, 35832($27)
+	sw $15, 35836($27)
+	sw $15, 35840($27)
+	
+	
+	sw $15, 35856($27)	
+	sw $15, 35860($27)
+	sw $15, 35864($27)
+
+	sw $15, 35876($27)
+	
+	sw $15, 35900($27)
+	sw $15, 35924($27)
+	
+	sw $15, 35936($27)
+	sw $15, 35940($27)
+	sw $15, 36964($27)
+	sw $15, 36456($27)
+	sw $15, 35944($27)
+	sw $15, 35948($27)
+	
+	sw $15, 35964($27)
+	sw $15, 35968($27)
+	sw $15, 35972($27)
+	sw $15, 35976($27)
+	#####################
+	
 	addi $t1,$0,5
 
 	sw $15,8($sp)
 	sw $27,4($sp)
 	sw $ra,0($sp)
-	addi $sp,$sp,12
 	
-	jr $ra
+LoopMenu:
+    # (Dó)
+    li $a0, 72
+    jal TocarEVerificar
+    
+    # (Dó)
+    li $a0, 48
+    jal TocarEVerificar
+    
+    #(Si)
+    li $a0, 70
+    jal TocarEVerificar
+    
+    # (Lá
+    li $a0, 45
+    jal TocarEVerificar
+
+    j LoopMenu        # Loop infinito na música
+
+TocarEVerificar:
+    li $a1, 380        
+    li $a2, 80         
+    li $a3, 40         
+    li $v0, 33         
+    syscall
+
+    # Checa o Teclado
+    lui $t8, 0xffff
+    lw $t9, 0($t8)
+    andi $t9, $t9, 1
+    beq $t9, $zero, FimCheck  
+
+    lw $t7, 4($t8)
+    li $t6, 32                # ASCII Espaço
+    beq $t7, $t6, SairSplash  
+
+FimCheck:
+    jr $ra                    # Volta para tocar a próxima nota
+
+SairSplash:
+    # Restauramos tudo e fechamos a pilha
+    lw $ra, 0($sp)    # Recupera o endereço de retorno real
+    lw $27, 4($sp)    # Recupera o $27 original
+    lw $15, 8($sp)    # Recupera o $15 original
+    addi $sp, $sp, 12 # Devolve o espaço da pilha
+    
+    jr $ra            # Pula para o _init_ 
+
+
+
 #---------------------------
 Game_over:
 	addi $sp,$sp,-20
@@ -4210,9 +4656,34 @@ Game_over:
 	lw $16,8($sp)
 	lw $17,12($sp)
 	lw $18,16($sp)
-	addi $sp,$sp,20
-	addi $2,$0,10
-	syscall
+	
+	LoopMenuPerde:
+    # (Dó)
+    li $a0, 36
+    jal Tocar
+    
+    # (Dó)
+    li $a0, 39
+    jal Tocar
+    
+    #(Si)
+    li $a0, 43
+    jal Tocar
+    
+    # (Lá
+    li $a0, 46
+    jal Tocar
+
+    j LoopMenuPerde        # Loop infinito na música
+
+Tocar:
+    li $a1, 450        
+    li $a2, 80         
+    li $a3, 40         
+    li $v0, 33         
+    syscall
+    
+    jr $ra
 #--------------------------
 Game_win:
 	addi $sp,$sp,24
@@ -4744,12 +5215,39 @@ Game_win:
 	lw $18,24($sp)	
 	
 	addi $sp,$sp,28
-	
-	addi $2,$0,10
-	syscall
-	
-	
-	
+
+VitoriaSom:
+    # Nota 1: C (Dó Agudo)
+    li $a0, 84          # Pitch agudo e brilhante
+    jal TocarVitoria
+    
+    # Nota 2: Eb (Mi bemol Agudo)
+    li $a0, 87          
+    jal TocarVitoria
+    
+    # Nota 3: G (Sol Agudo)
+    li $a0, 91          
+    jal TocarVitoria
+    
+    # Nota 4: Bb (Si bemol Agudo)
+    li $a0, 94          
+    jal TocarVitoria
+    
+    # Nota 5: C (Dó ainda mais agudo) - O Clímax da vitória
+    li $a0, 96          
+    jal TocarVitoria
+
+    j VitoriaSom
+
+# --- Sub-rotina de Som de Vitória ---
+TocarVitoria:
+    li $a1, 250        # Duração bem curta (mais rápido = mais alegre)
+    li $a2, 81         # Instrumento: Lead 8 (Sawtooth) - som de sintetizador de vitória
+    li $a3, 70         # Volume alto
+    li $v0, 33         # Syscall síncrona (espera a nota acabar antes de ir pra próxima)
+    syscall
+    
+    jr $ra
 	
 	
 	
