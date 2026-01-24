@@ -1,11 +1,9 @@
-_init_:
-    	lui  $16, 0x1001
 cenario:      
-
+	lui  $16, 0x1001
     	jal DesenhaSplash
     	jal DesenhaHUD
     	jal DesenhaMapa
-    	lui $3,0x1001  # Endereço do aviao
+    	lui $3,0x1001  # Endereï¿½o do aviao
     	addi $3,$3,45312
     	jal DesenhaAviao 
 
@@ -17,14 +15,14 @@ Entidades:
     	sw $0,100($24) #Flag do tiro, 1 se estiver ativo, 0 ao contrario
     	
     	lui $25,0x1001
-    	addi $25,$25,18176 # Endereço do tiro
-    	sw $25,200($24) # Endereço do tiro
+    	addi $25,$25,18176 # Endereï¿½o do tiro
+    	sw $25,200($24) # Endereï¿½o do tiro
     	
     	sw $0,300($24) #Contador de frames
     	
     	
     	lui $25,0x1001
-    	addi $25,$25,252 # Endereço do combustivel
+    	addi $25,$25,252 # Endereï¿½o do combustivel
     	sw $25,400($24) 
     	lw $25,400($24)		
     	add $7,$0,$25
@@ -45,7 +43,7 @@ Entidades:
     	add $7,$0,$25
     	jal DesenhaCasa2
     
-    	lui $25,0x1001 # Endereço do floco de neve
+    	lui $25,0x1001 # Endereï¿½o do floco de neve
     	addi $25,$25,184
     	sw $25,700($24)
     	lw $25,700($24)
@@ -53,7 +51,7 @@ Entidades:
     	jal DesenhaFloco
 
 
-    	lui $25,0x1001 # Endereço do Navio
+    	lui $25,0x1001 # Endereï¿½o do Navio
     	addi $25,$25,320
     	sw $25,800($24)
     	lw $25,800($24)
@@ -64,7 +62,7 @@ Entidades:
     	sw $0,1100($24) #Navio2
     	sw $0,1200($24) #Floco2
     
-    	lui $23,0x1001 # Endereço do Medidor
+    	lui $23,0x1001 # Endereï¿½o do Medidor
     	addi $23,$23,57708
     	sw $23,1300($24)
     	
@@ -89,7 +87,7 @@ MoverEntidade:
     	addi $9,$9,1
     	sw $9,300($24)
     
-    	li $10,30
+    	li $10,35
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaFloco
@@ -98,7 +96,7 @@ MoverEntidade:
     	jal MoveFloco
     	sw $7, 700($24)
 PulaFloco:
-    	li $10,20
+    	li $10,30
     	div $9,$10
     	mfhi $11
     	bne $11,$0,PulaNavio
@@ -1507,23 +1505,23 @@ ChecarColisao:
 	lw $10,200($24)
 	beq $10,$0,FimColisao
 	
-	lw $13,800($24) #Endereço base do navio
-	beq $13,$0,TestaNavio2 #Se não houver navio,pula
+	lw $13,800($24) #Endereï¿½o base do navio
+	beq $13,$0,TestaNavio2 #Se nï¿½o houver navio,pula
 	
-	sub $15,$10,$13 #Diferença total de endereços
-	abs $15,$15 # Valor absoluto para não importar quem vem antes
-	srl $18,$15,9 #Divide por 512 para pegar a diferença de linhas
+	sub $15,$10,$13 #Diferenï¿½a total de endereï¿½os
+	abs $15,$15 # Valor absoluto para nï¿½o importar quem vem antes
+	srl $18,$15,9 #Divide por 512 para pegar a diferenï¿½a de linhas
 	addi $16,$0,4 #Altura do Navio em linhas
 	bgt $18,$16,TestaNavio2  #Se estiver muito longe verticalmente,pula
 	
-	andi $11,$10,0x1FF #X do tiro (endereço do tiro and 511)
-	andi $12,$13,0x1FF #X do navio(endereço do navio and 511)
+	andi $11,$10,0x1FF #X do tiro (endereï¿½o do tiro and 511)
+	andi $12,$13,0x1FF #X do navio(endereï¿½o do navio and 511)
 	
-	sub $17,$11,$12 #Diferença X = X-tiro - X-navio
+	sub $17,$11,$12 #Diferenï¿½a X = X-tiro - X-navio
 	abs $17,$17
 	
 	addi $16,$0,30 #Largura da caixa de colisao
-	bgt $17,$16, TestaNavio2 # Se a distancia X for maior que a largura, não colidiu
+	bgt $17,$16, TestaNavio2 # Se a distancia X for maior que a largura, nï¿½o colidiu
 	
 	j ResetNavio1 #Se passou nos dois testes, colidiu
 TestaNavio2:
@@ -1735,18 +1733,18 @@ ChecarColisaoInimigo:
 ChecaNavio:
 	beq $27,$0,Retorno
 	
-	sub $8,$3,$27 #$8 = (Endereço Avião) - (Endereço Navio)
+	sub $8,$3,$27 #$8 = (Endereï¿½o Aviï¿½o) - (Endereï¿½o Navio)
 	abs $8,$8
-	li $9,2300    ## 4500 bytes sao quase 9 linhas de distância
-	bgt $8,$9,Retorno # Se a diferença > 4500, o avião está muito abaixo do navio
+	li $9,2300    ## 4500 bytes sao quase 9 linhas de distï¿½ncia
+	bgt $8,$9,Retorno # Se a diferenï¿½a > 4500, o aviï¿½o estï¿½ muito abaixo do navio
 	
 	# Teste de colunas
-	andi $10,$3,0x1ff # faz um and com endereço do aviao e 0x1ff para obter a coluna do aviao
-	andi $11,$27,0x1ff # faz um and com endereço do navio e 0x1ff para obter a coluna do navio
+	andi $10,$3,0x1ff # faz um and com endereï¿½o do aviao e 0x1ff para obter a coluna do aviao
+	andi $11,$27,0x1ff # faz um and com endereï¿½o do navio e 0x1ff para obter a coluna do navio
 	sub $12,$10,$11 # 12 =  distancia entre as colunas
 	
 	abs $12,$12 # vira positivo
-	li $13,45 # Teste se estão a menos de 45 bytes
+	li $13,45 # Teste se estï¿½o a menos de 45 bytes
 	blt $12,$13,Game_over # game_over
 	
 	jr $ra
@@ -2169,9 +2167,9 @@ DesenhaPontos:
 	lui $8,0x1001
 	lui $16,0x1001
 	lui $22,0x1001
-	addi $8,$8,51032 #Endereço do primeiro numero
-	addi $16,$16,51000 #Endereço do segundo numero
-	addi $22,$22,50972 # Endereço do terceiro numero
+	addi $8,$8,51032 #Endereï¿½o do primeiro numero
+	addi $16,$16,51000 #Endereï¿½o do segundo numero
+	addi $22,$22,50972 # Endereï¿½o do terceiro numero
 	
 	ori $11,$0,0x404040 #Cinza
 	ori $9,$0,0xFFFF00 #Amarel
@@ -2183,7 +2181,7 @@ ApagarTerceiro:
 ApagarSegundo:
 	j ApagaSegundoPonto
 	
-# PARTE OBSCURA DO CÓDIGO
+# PARTE OBSCURA DO Cï¿½DIGO
 ChecaPontos:
 	beq $21,1,p_10
 	beq $21,2,p_20
@@ -3831,7 +3829,7 @@ DesenhaSplash:
     	sw $15, 30892($27)
     	sw $15, 30896($27)
 	################
-	#ESPAÇO
+	#ESPAï¿½O
 	################
 	sw $15, 32244($27)
     	sw $15, 32248($27)
@@ -3999,11 +3997,11 @@ DesenhaSplash:
 	sw $ra,0($sp)
 	
 LoopMenu:
-    # (Dó)
+    # (Dï¿½)
     li $a0, 72
     jal TocarEVerificar
     
-    # (Dó)
+    # (Dï¿½)
     li $a0, 48
     jal TocarEVerificar
     
@@ -4011,11 +4009,11 @@ LoopMenu:
     li $a0, 70
     jal TocarEVerificar
     
-    # (Lá
+    # (Lï¿½
     li $a0, 45
     jal TocarEVerificar
 
-    j LoopMenu        # Loop infinito na música
+    j LoopMenu        # Loop infinito na mï¿½sica
 
 TocarEVerificar:
     li $a1, 380        
@@ -4031,18 +4029,18 @@ TocarEVerificar:
     beq $t9, $zero, FimCheck  
 
     lw $t7, 4($t8)
-    li $t6, 32                # ASCII Espaço
+    li $t6, 32                # ASCII Espaï¿½o
     beq $t7, $t6, SairSplash  
 
 FimCheck:
-    jr $ra                    # Volta para tocar a próxima nota
+    jr $ra                    # Volta para tocar a prï¿½xima nota
 
 SairSplash:
     # Restauramos tudo e fechamos a pilha
-    lw $ra, 0($sp)    # Recupera o endereço de retorno real
+    lw $ra, 0($sp)    # Recupera o endereï¿½o de retorno real
     lw $27, 4($sp)    # Recupera o $27 original
     lw $15, 8($sp)    # Recupera o $15 original
-    addi $sp, $sp, 12 # Devolve o espaço da pilha
+    addi $sp, $sp, 12 # Devolve o espaï¿½o da pilha
     
     jr $ra            # Pula para o _init_ 
 
@@ -4658,11 +4656,11 @@ Game_over:
 	lw $18,16($sp)
 	
 	LoopMenuPerde:
-    # (Dó)
+    # (Dï¿½)
     li $a0, 36
     jal Tocar
     
-    # (Dó)
+    # (Dï¿½)
     li $a0, 39
     jal Tocar
     
@@ -4670,11 +4668,11 @@ Game_over:
     li $a0, 43
     jal Tocar
     
-    # (Lá
+    # (Lï¿½
     li $a0, 46
     jal Tocar
 
-    j LoopMenuPerde        # Loop infinito na música
+    j LoopMenuPerde        # Loop infinito na mï¿½sica
 
 Tocar:
     li $a1, 450        
@@ -5217,7 +5215,7 @@ Game_win:
 	addi $sp,$sp,28
 
 VitoriaSom:
-    # Nota 1: C (Dó Agudo)
+    # Nota 1: C (Dï¿½ Agudo)
     li $a0, 84          # Pitch agudo e brilhante
     jal TocarVitoria
     
@@ -5233,18 +5231,18 @@ VitoriaSom:
     li $a0, 94          
     jal TocarVitoria
     
-    # Nota 5: C (Dó ainda mais agudo) - O Clímax da vitória
+    # Nota 5: C (Dï¿½ ainda mais agudo) - O Clï¿½max da vitï¿½ria
     li $a0, 96          
     jal TocarVitoria
 
     j VitoriaSom
 
-# --- Sub-rotina de Som de Vitória ---
+# --- Sub-rotina de Som de Vitï¿½ria ---
 TocarVitoria:
-    li $a1, 250        # Duração bem curta (mais rápido = mais alegre)
-    li $a2, 81         # Instrumento: Lead 8 (Sawtooth) - som de sintetizador de vitória
+    li $a1, 250        # Duraï¿½ï¿½o bem curta (mais rï¿½pido = mais alegre)
+    li $a2, 81         # Instrumento: Lead 8 (Sawtooth) - som de sintetizador de vitï¿½ria
     li $a3, 70         # Volume alto
-    li $v0, 33         # Syscall síncrona (espera a nota acabar antes de ir pra próxima)
+    li $v0, 33         # Syscall sï¿½ncrona (espera a nota acabar antes de ir pra prï¿½xima)
     syscall
     
     jr $ra
