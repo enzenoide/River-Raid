@@ -21,7 +21,7 @@ O projeto foi desenvolvido **inteiramente em Assembly MIPS**, utilizando o simul
 
 Faça o download do simulador **MARS** pelo link oficial:
 
-🔗 *(adicione aqui o link de download do MARS)*
+🔗 *(https://github.com/dpetersanderson/MARS/releases/tag/v.4.5.1)*
 
 ---
 
@@ -59,7 +59,7 @@ Após esses passos, o jogo será iniciado corretamente.
 ## 🕹️ Mecânicas do Jogo
 
 - O jogador controla um avião e deve **destruir as entidades inimigas** para ganhar pontos.
-- Algumas entidades representam **combustível**:
+- Uma das entidades representam **combustível**:
   - O combustível deve ser coletado para evitar que o avião fique sem energia.
   - Caso o combustível acabe, o jogador perde.
 - Se o jogador **colidir com qualquer entidade**, o jogo termina.
