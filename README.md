@@ -1,12 +1,12 @@
 # 🎮 River Raid – Assembly MIPS (MARS)
 
-Este projeto é uma **recriação do jogo clássico River Raid**, originalmente lançado para o console **Atari**, sendo um dos títulos mais populares da plataforma.
+This project is a **recreation of the classic game River Raid**, originally released for the **Atari** console and considered one of the most popular titles on the platform.
 
-O projeto foi desenvolvido **inteiramente em Assembly MIPS**, utilizando o simulador **MARS (MIPS Assembler and Runtime Simulator)**, com foco em programação de baixo nível e manipulação direta de recursos simulados.
+The project was developed **entirely in Assembly MIPS**, using the **MARS (MIPS Assembler and Runtime Simulator)**, with a focus on low-level programming and direct manipulation of simulated resources.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Technologies Used
 
 - **Assembly MIPS**
 - **MARS (MIPS Assembler and Runtime Simulator)**
@@ -15,75 +15,75 @@ O projeto foi desenvolvido **inteiramente em Assembly MIPS**, utilizando o simul
 
 ---
 
-## ▶️ Como Jogar
+## ▶️ How to Play
 
-### 1. Download do Simulador
+### 1. Simulator Download
 
-Faça o download do simulador **MARS** pelo link oficial:
+Download the **MARS** simulator from the official link:
 
-🔗 *(https://github.com/dpetersanderson/MARS/releases/tag/v.4.5.1)*
+🔗 https://github.com/dpetersanderson/MARS/releases/tag/v.4.5.1
 
 ---
 
-### 2. Executando o Jogo
+### 2. Running the Game
 
-1. Abra o simulador **MARS**
-2. Baixe o arquivo `RiverRaid.asm` disponível neste repositório
-3. No MARS, abra o arquivo `RiverRaid.asm`
-4. Vá até a aba **Tools** e abra:
+1. Open the **MARS** simulator
+2. Download the `RiverRaid.asm` file available in this repository
+3. In MARS, open the `RiverRaid.asm` file
+4. Go to the **Tools** tab and open:
    - **Bitmap Display**
      - `Unit Width`: **4**
      - `Unit Height`: **4**
      - `Display Width`: **512**
      - `Display Height`: **512**
-     - Clique em **Connect to MIPS**
-5. Ainda na aba **Tools**, abra:
+     - Click **Connect to MIPS**
+5. Still in the **Tools** tab, open:
    - **Keyboard and Display MMIO Simulator**
-     - Clique em **Connect to MIPS**
-6. Vá até a aba **Run**:
-   - Clique em **Assemble**
-   - Em seguida, clique em **Go**
+     - Click **Connect to MIPS**
+6. Go to the **Run** tab:
+   - Click **Assemble**
+   - Then click **Go**
 
-Após esses passos, o jogo será iniciado corretamente.
-
----
-
-## 🎮 Controles
-
-- **W** — Atirar  
-- **A** — Mover para a esquerda  
-- **D** — Mover para a direita  
+After completing these steps, the game will start correctly.
 
 ---
 
-## 🕹️ Mecânicas do Jogo
+## 🎮 Controls
 
-- O jogador controla um avião e deve **destruir as entidades inimigas** para ganhar pontos.
-- Uma das entidades representam **combustível**:
-  - O combustível deve ser coletado para evitar que o avião fique sem energia.
-  - Caso o combustível acabe, o jogador perde.
-- Se o jogador **colidir com qualquer entidade**, o jogo termina.
-- O jogador vence ao atingir **300 pontos**.
+- **W** — Shoot  
+- **A** — Move left  
+- **D** — Move right  
 
 ---
 
-## 📚 Coisas que Aprendi
+## 🕹️ Game Mechanics
 
-Durante o desenvolvimento deste projeto, foi possível consolidar diversos conceitos importantes relacionados à programação de baixo nível, entre eles:
-
-- Estruturação de um projeto completo utilizando **Assembly MIPS**
-- Manipulação direta de **registradores**, memória e pilha
-- Controle de fluxo utilizando **branches**, **jumps** e sub-rotinas
-- Implementação de **lógica de jogo** sem o uso de estruturas de alto nível
-- Detecção de colisões e controle de estado do jogo
-- Manipulação gráfica por meio do **Bitmap Display** do MARS
-- Comunicação com dispositivos de entrada através do **Keyboard and Display MMIO Simulator**
-- Gerenciamento de tempo e atualização contínua do jogo (game loop)
-- Organização e modularização de código Assembly para melhorar legibilidade e manutenção
-- Depuração e testes em ambiente de simulação
+- The player controls an aircraft and must **destroy enemy entities** to earn points.
+- One of the entities represents **fuel**:
+  - Fuel must be collected to prevent the aircraft from running out of energy.
+  - If the fuel runs out, the player loses.
+- If the player **collides with any entity**, the game ends.
+- The player wins by reaching **300 points**.
 
 ---
 
-## 📌 Observações
+## 📚 What I Learned
 
-Este projeto possui caráter **educacional**, tendo como objetivo principal o aprendizado e a prática de conceitos fundamentais de programação em baixo nível, simulação de hardware e desenvolvimento de jogos utilizando Assembly.
+During the development of this project, several important low-level programming concepts were reinforced, including:
+
+- Structuring a complete project using **Assembly MIPS**
+- Direct manipulation of **registers**, memory, and stack
+- Flow control using **branches**, **jumps**, and subroutines
+- Implementing **game logic** without high-level data structures
+- Collision detection and game state management
+- Graphics handling through the **MARS Bitmap Display**
+- Input handling using the **Keyboard and Display MMIO Simulator**
+- Time management and continuous game updates (game loop)
+- Organization and modularization of Assembly code to improve readability and maintainability
+- Debugging and testing in a simulated environment
+
+---
+
+## 📌 Notes
+
+This project has an **educational purpose**, aiming to practice and reinforce fundamental concepts of low-level programming, hardware simulation, and game development using Assembly.
