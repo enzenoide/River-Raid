@@ -1,3 +1,7 @@
+[ [English](README.md) ] | [ **Português** ]
+
+
+
 # 🎮 River Raid – Assembly MIPS (MARS)
 
 Este projeto é uma **recriação do jogo clássico River Raid**, originalmente lançado para o console **Atari**, sendo um dos títulos mais populares da plataforma.
